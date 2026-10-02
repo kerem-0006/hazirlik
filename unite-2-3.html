@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ünite 2-3 Çalışma Sayfası</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap">
+<style>
+/* Layout: a shared revision sheet, one column of topic stations; each station = rule cards, then a self-check drill where answers are typed and checked in place. */
+:root {
+  --bg: #eef6f5;
+  --sheet: #ffffff;
+  --ink: #16302e;
+  --muted: #5a716f;
+  --teal: #0e8f86;
+  --teal-soft: #d5eeeb;
+  --ans: #c2185b;
+  --ans-bg: #fde6ef;
+  --wrong: #9aa9a7;
+  --line: #cfe1df;
+  --good: #1f7a3a;
+  --good-bg: #dff3e4;
+  --bad: #b3261e;
+  --bad-bg: #fbe3e1;
+  --display: "Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
+  --body: "Atkinson Hyperlegible", "Helvetica Neue", Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0d1a19; --sheet: #142624; --ink: #e3efed; --muted: #93aaa7;
+    --teal: #3cc2b6; --teal-soft: #1b3835; --ans: #ff7eb0; --ans-bg: #3a1a28;
+    --wrong: #5d706e; --line: #24403d; --good: #7fd69a; --good-bg: #173523; --bad: #ff8a80; --bad-bg: #3d1a17;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0d1a19; --sheet: #142624; --ink: #e3efed; --muted: #93aaa7;
+  --teal: #3cc2b6; --teal-soft: #1b3835; --ans: #ff7eb0; --ans-bg: #3a1a28;
+  --wrong: #5d706e; --line: #24403d; --good: #7fd69a; --good-bg: #173523; --bad: #ff8a80; --bad-bg: #3d1a17;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 17px; line-height: 1.55; }
+.wrap { max-width: 860px; margin: 0 auto; padding-inline: 16px; padding-block: 28px 56px; display: grid; gap: 22px; }
+
+header { display: grid; gap: 12px; }
+.eyebrow { font: 700 12px/1 var(--body); letter-spacing: .12em; text-transform: uppercase; color: var(--teal); }
+h1 { font: 800 clamp(32px, 7vw, 52px)/1.02 var(--display); margin: 0; text-wrap: balance; letter-spacing: -.01em; }
+h1 span { color: var(--teal); }
+.lead { margin: 0; color: var(--muted); max-width: 64ch; }
+.route { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin: 0; padding: 0; list-style: none; }
+.route li { min-width: 0; }
+.route a { display: block; height: 100%; background: var(--sheet); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: 14px; line-height: 1.35; color: inherit; text-decoration: none; }
+.route a:hover { border-color: var(--teal); }
+.route b { display: block; font: 800 22px/1 var(--display); color: var(--teal); margin-bottom: 4px; }
+.route small { display: block; color: var(--muted); font-size: 12px; margin-top: 2px; }
+
+section.st { background: var(--sheet); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; scroll-margin-top: 16px; }
+.st-head { display: flex; gap: 14px; align-items: flex-start; padding: 16px 18px; background: var(--teal-soft); }
+.num { font: 800 34px/1 var(--display); color: var(--teal); min-width: 1.2em; }
+.st-head h2 { font: 800 22px/1.2 var(--display); margin: 0; }
+.st-head p { margin: 4px 0 0; font-size: 15px; color: var(--muted); }
+.body { padding: 16px 18px 18px; display: grid; gap: 16px; }
+.body > p { margin: 0; }
+
+.a { color: var(--ans); background: var(--ans-bg); font-weight: 700; padding: 0 5px; border-radius: 6px; }
+.t { color: var(--teal); font-weight: 700; }
+s.x { color: var(--wrong); text-decoration-thickness: 2px; }
+.ex { font-style: italic; }
+.src { font-size: 13px; color: var(--muted); }
+
+.rules { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.rule { border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; display: grid; gap: 6px; align-content: start; min-width: 0; }
+.rule.wide { grid-column: 1 / -1; }
+.rule h3 { margin: 0; font: 800 16px/1.25 var(--display); }
+.rule p { margin: 0; }
+
+.tbl { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 15px; }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+td.has { color: var(--ans); font-weight: 700; }
+td.have { color: var(--teal); font-weight: 700; }
+.group td { background: var(--teal-soft); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--teal); font-weight: 700; }
+
+.drill { border: 2px dashed var(--teal); border-radius: 12px; padding: 14px 16px; display: grid; gap: 10px; }
+.drill-head { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: baseline; justify-content: space-between; }
+.drill-head h3 { margin: 0; font: 800 18px/1.2 var(--display); }
+.score { font-size: 14px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.q { display: grid; grid-template-columns: 1.6em 1fr; gap: 8px; padding: 8px 0; border-bottom: 1px solid var(--line); }
+.q:last-of-type { border-bottom: 0; }
+.q .n { font-weight: 700; color: var(--teal); }
+.q .line { min-width: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.q input { font: 700 16px var(--body); color: var(--ink); background: var(--bg); border: 2px solid var(--line); border-radius: 8px; padding: 4px 8px; width: 9.5em; max-width: 100%; }
+.q input.wide { width: 12em; }
+.q input:focus-visible { outline: none; border-color: var(--teal); }
+.q input.ok { border-color: var(--good); background: var(--good-bg); color: var(--good); }
+.q input.no { border-color: var(--bad); background: var(--bad-bg); color: var(--bad); }
+.q .hint { color: var(--muted); font-size: 14px; }
+.q .fb { grid-column: 2; font-size: 14px; }
+.q .fb .a { font-size: 15px; }
+.btns { display: flex; flex-wrap: wrap; gap: 8px; }
+.btn { font: 700 14px var(--body); border-radius: 999px; padding: 8px 16px; cursor: pointer; border: 2px solid var(--teal); }
+.btn.primary { background: var(--teal); color: var(--sheet); }
+.btn.ghost { background: transparent; color: var(--teal); }
+.btn:focus-visible { outline: 3px solid var(--ans); outline-offset: 2px; }
+
+.chat { display: grid; gap: 8px; }
+.msg { max-width: 80%; padding: 8px 14px; border-radius: 16px; line-height: 1.4; }
+.msg .who { display: block; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; font-weight: 700; color: var(--muted); }
+.msg.shop { background: var(--teal-soft); justify-self: start; border-bottom-left-radius: 4px; }
+.msg.me { background: var(--ans-bg); justify-self: end; border-bottom-right-radius: 4px; text-align: right; }
+.msg .act { display: block; font-size: 13px; color: var(--muted); font-style: italic; }
+.hl { color: var(--ans); font-weight: 700; }
+footer { font-size: 13px; color: var(--muted); }
+
+@media (max-width: 620px) {
+  body { font-size: 16px; }
+  .route { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .rules { grid-template-columns: 1fr; }
+  .msg { max-width: 92%; }
+}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <span class="eyebrow">Roadmap A2 · Ünite 2 ve 3 · tekrar</span>
+    <h1>Ünite 2-3 <span>çalışma sayfası</span></h1>
+    <p class="lead">Önce kuralı oku, sonra alıştırmada cevabını kutuya yaz ve "Kontrol et"e bas. Doğrular yeşil, yanlışlar kırmızı olur. Takılırsan "Cevapları göster" düğmesi var.</p>
+    <ol class="route">
+      <li><a href="#have"><b>1</b>have got<small>Ünite 2C · s.19</small></a></li>
+      <li><a href="#ps"><b>2</b>he / she / it + s<small>Ünite 3B · s.25</small></a></li>
+      <li><a href="#shop"><b>3</b>Dükkânda<small>Ünite 2D · s.20</small></a></li>
+      <li><a href="#phr"><b>4</b>20 kalıp<small>Ünite 1-5</small></a></li>
+    </ol>
+  </header>
+
+  <!-- 1 · have got -->
+  <section class="st" id="have">
+    <div class="st-head"><span class="num">1</span><div><h2>have got · sahip olmak</h2><p>Türkçedeki "-m var". <span class="ex">I've got a laptop.</span> = Bir laptopum var.</p></div></div>
+    <div class="body">
+      <div class="rules">
+        <div class="rule wide"><h3>Tablo</h3>
+          <div class="tbl"><table>
+            <thead><tr><th>Kim</th><th>+ olumlu</th><th>− olumsuz</th><th>? soru</th></tr></thead>
+            <tbody>
+              <tr><td>I / you / we / they</td><td class="have">have got ('ve got)</td><td class="have">haven't got</td><td class="have">Have ... got?</td></tr>
+              <tr><td>he / she / it</td><td class="has">has got ('s got)</td><td class="has">hasn't got</td><td class="has">Has ... got?</td></tr>
+            </tbody>
+          </table></div>
+        </div>
+        <div class="rule"><h3>Tek kural</h3>
+          <p>he / she / it → <span class="a">has</span> · gerisi → <span class="t">have</span></p>
+          <p>Dikkat: <b>He's got</b> içindeki 's = <b>has</b>, "is" değil.</p>
+        </div>
+        <div class="rule"><h3>Kısa cevapta got yok</h3>
+          <p class="ex">Have you got a laptop?</p>
+          <p>→ Yes, I <span class="a">have</span>. / No, I <span class="a">haven't</span>.</p>
+        </div>
+        <div class="rule"><h3>a / any</h3>
+          <p>tek şey → a / an: <span class="ex">I've got a car.</span></p>
+          <p>olumsuz ve soruda çoğul → any: <span class="ex">I haven't got any sunglasses.</span> <span class="src">(s.118)</span></p>
+        </div>
+        <div class="rule"><h3>Sık hata</h3>
+          <p><s class="x">He have got a car.</s> → He <span class="a">has</span> got a car.</p>
+          <p><s class="x">Yes, I have got.</s> → Yes, I <span class="a">have</span>.</p>
+        </div>
+      </div>
+
+      <div class="drill" data-drill>
+        <div class="drill-head"><h3>Alıştırma · boşluğu doldur</h3><span class="score" aria-live="polite"></span></div>
+        <div class="q"><span class="n">1</span><div class="line">My sister <input class="wide" aria-label="Soru 1" data-ans="has got|'s got|hasgot"> a new phone. <span class="hint">(+)</span></div><div class="fb"></div></div>
+        <div class="q"><span class="n">2</span><div class="line">We <input class="wide" aria-label="Soru 2" data-ans="haven't got|have not got"> any milk. <span class="hint">(−)</span></div><div class="fb"></div></div>
+        <div class="q"><span class="n">3</span><div class="line"><input aria-label="Soru 3" data-ans="have"> you got a pen?</div><div class="fb"></div></div>
+        <div class="q"><span class="n">4</span><div class="line">"Have you got a dog?" "No, I <input aria-label="Soru 4" data-ans="haven't|have not">."</div><div class="fb"></div></div>
+        <div class="q"><span class="n">5</span><div class="line"><input aria-label="Soru 5" data-ans="has"> your brother got a car?</div><div class="fb"></div></div>
+        <div class="q"><span class="n">6</span><div class="line">They <input class="wide" aria-label="Soru 6" data-ans="have got|'ve got"> two cats. <span class="hint">(+)</span></div><div class="fb"></div></div>
+        <div class="btns"><button class="btn primary" type="button" data-check>Kontrol et</button><button class="btn ghost" type="button" data-show>Cevapları göster</button><button class="btn ghost" type="button" data-reset>Temizle</button></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 · present simple he/she/it -->
+  <section class="st" id="ps">
+    <div class="st-head"><span class="num">2</span><div><h2>Geniş zaman: he / she / it + s</h2><p>Kitaptan: <span class="ex">I get up at 7.</span> → <span class="ex">Keira <b>gets</b> up at 2 a.m.</span></p></div></div>
+    <div class="body">
+      <div class="rules">
+        <div class="rule"><h3>Tek kural</h3>
+          <p>he / she / it → fiil + <span class="a">s</span></p>
+          <p>I / you / we / they → fiil olduğu gibi</p>
+        </div>
+        <div class="rule"><h3>Olumsuz</h3>
+          <p><b>doesn't</b> + yalın fiil</p>
+          <p class="ex">She doesn't like her job. · He doesn't have lunch.</p>
+          <p><s class="x">doesn't likes</s>: -s bir kere gelir.</p>
+        </div>
+        <div class="rule wide"><h3>Yazım (s.25)</h3>
+          <div class="tbl"><table>
+            <thead><tr><th>Fiil nasıl bitiyor</th><th>Ek</th><th>Kitabın örneği</th></tr></thead>
+            <tbody>
+              <tr><td>normal</td><td class="has">-s</td><td>She love<span class="a">s</span> her job.</td></tr>
+              <tr><td>-s, -sh, -ch, -x, -z, -o</td><td class="has">-es</td><td>He finish<span class="a">es</span> work at 7 a.m. · He go<span class="a">es</span> to bed.</td></tr>
+              <tr><td>sessiz harf + y</td><td class="has">y → -ies</td><td>He worr<span class="a">ies</span> about the traffic.</td></tr>
+              <tr><td>have</td><td class="has">has</td><td>He <span class="a">has</span> lunch at 1 p.m.</td></tr>
+            </tbody>
+          </table></div>
+        </div>
+        <div class="rule wide"><h3>Sık hata</h3>
+          <p><s class="x">He is goes to bed.</s> → He <span class="a">goes</span> to bed. Geniş zamanda is / are yok.</p>
+          <p><s class="x">He gos to work.</s> → He go<span class="a">es</span> to work.</p>
+        </div>
+      </div>
+
+      <div class="drill" data-drill>
+        <div class="drill-head"><h3>Alıştırma · fiili doğru yaz</h3><span class="score" aria-live="polite"></span></div>
+        <div class="q"><span class="n">1</span><div class="line">He <input aria-label="Soru 1" data-ans="watches"> TV every evening. <span class="hint">(watch)</span></div><div class="fb"></div></div>
+        <div class="q"><span class="n">2</span><div class="line">She <input aria-label="Soru 2" data-ans="studies"> English at university. <span class="hint">(study)</span></div><div class="fb"></div></div>
+        <div class="q"><span class="n">3</span><div class="line">My dad <input aria-label="Soru 3" data-ans="goes"> to work at 8. <span class="hint">(go)</span></div><div class="fb"></div></div>
+        <div class="q"><span class="n">4</span><div class="line">The film <input aria-label="Soru 4" data-ans="starts"> at 9 p.m. <span class="hint">(start)</span></div><div class="fb"></div></div>
+        <div class="q"><span class="n">5</span><div class="line">Ali <input aria-label="Soru 5" data-ans="plays"> football on Sundays. <span class="hint">(play)</span></div><div class="fb"></div></div>
+        <div class="q"><span class="n">6</span><div class="line">He <input aria-label="Soru 6" data-ans="has"> breakfast at 7. <span class="hint">(have)</span></div><div class="fb"></div></div>
+        <div class="q"><span class="n">7</span><div class="line">She <input class="wide" aria-label="Soru 7" data-ans="doesn't like|does not like"> coffee. <span class="hint">(not like)</span></div><div class="fb"></div></div>
+        <div class="q"><span class="n">8</span><div class="line">We <input class="wide" aria-label="Soru 8" data-ans="don't watch|do not watch"> TV in the morning. <span class="hint">(not watch)</span></div><div class="fb"></div></div>
+        <div class="btns"><button class="btn primary" type="button" data-check>Kontrol et</button><button class="btn ghost" type="button" data-show>Cevapları göster</button><button class="btn ghost" type="button" data-reset>Temizle</button></div>
+        <p class="src">İpucu: 5'te play'in sonundaki y'den önce sesli harf var. 8'de özne we, he/she/it değil.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 · Dükkânda -->
+  <section class="st" id="shop">
+    <div class="st-head"><span class="num">3</span><div><h2>Dükkânda alışveriş</h2><p><b>Here you are</b> = "Buyurun". Birine bir şey uzatırken söylenir, kelime kelime çevrilmez.</p></div></div>
+    <div class="body">
+      <div class="chat" aria-label="Örnek diyalog">
+        <div class="msg me"><span class="who">Müşteri</span>Have you got any water?</div>
+        <div class="msg shop"><span class="who">Satıcı</span>Yes. How many bottles would you like?</div>
+        <div class="msg me"><span class="who">Müşteri</span>Two, please.</div>
+        <div class="msg shop"><span class="who">Satıcı</span><span class="act">şişeleri uzatıyor</span><span class="hl">Here you are.</span> Anything else?</div>
+        <div class="msg me"><span class="who">Müşteri</span>No, thanks. How much is that?</div>
+        <div class="msg shop"><span class="who">Satıcı</span>That's £1.25, please. Cash or card?</div>
+        <div class="msg me"><span class="who">Müşteri</span>Can I pay by card?</div>
+      </div>
+      <p class="src">Kalıplar kitabın s.20 Useful phrases kutusundan, diyalog örnek olarak kuruldu.</p>
+
+      <div class="drill" data-drill>
+        <div class="drill-head"><h3>Alıştırma · boşluğu doldur</h3><span class="score" aria-live="polite"></span></div>
+        <div class="q"><span class="n">1</span><div class="line">Satıcı poşeti uzatıyor: "<input aria-label="Soru 1" data-ans="here"> you are."</div><div class="fb"></div></div>
+        <div class="q"><span class="n">2</span><div class="line">"How <input aria-label="Soru 2" data-ans="much"> are these pens?"</div><div class="fb"></div></div>
+        <div class="q"><span class="n">3</span><div class="line">"How <input aria-label="Soru 3" data-ans="many"> bottles would you like?"</div><div class="fb"></div></div>
+        <div class="q"><span class="n">4</span><div class="line">"Would you like a bag?" "No, <input aria-label="Soru 4" data-ans="thanks|thank you">."</div><div class="fb"></div></div>
+        <div class="q"><span class="n">5</span><div class="line">"Can I pay <input aria-label="Soru 5" data-ans="by"> card?"</div><div class="fb"></div></div>
+        <div class="q"><span class="n">6</span><div class="line">"<input aria-label="Soru 6" data-ans="anything"> else?" "No, that's all."</div><div class="fb"></div></div>
+        <div class="btns"><button class="btn primary" type="button" data-check>Kontrol et</button><button class="btn ghost" type="button" data-show>Cevapları göster</button><button class="btn ghost" type="button" data-reset>Temizle</button></div>
+        <p class="src">İpucu: fiyat sorarken much, sayı sorarken many.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 · 20 kalıp -->
+  <section class="st" id="phr">
+    <div class="st-head"><span class="num">4</span><div><h2>Günlük hayatta 20 kalıp</h2><p>Hepsi kitabın Useful phrases kutularından. Parantezde ünite ve sayfa var.</p></div></div>
+    <div class="body">
+      <div class="tbl"><table>
+        <thead><tr><th>İngilizce</th><th>Türkçe</th><th>Ne zaman</th></tr></thead>
+        <tbody>
+          <tr class="group"><td colspan="3">Dükkân ve kafe</td></tr>
+          <tr><td><span class="a">Here you are.</span></td><td>Buyurun</td><td>bir şey uzatırken (Ü2 s.20)</td></tr>
+          <tr><td>Anything else?</td><td>Başka bir şey?</td><td>satıcı sorar (Ü2 s.20)</td></tr>
+          <tr><td>Can I have ..., please?</td><td>... alabilir miyim?</td><td>sipariş verirken (Ü2 s.20)</td></tr>
+          <tr><td>I'd like ..., please.</td><td>... istiyorum</td><td>kibarca isterken (Ü3 s.28)</td></tr>
+          <tr><td>How much is it?</td><td>Ne kadar?</td><td>fiyat sorarken (Ü1 s.11)</td></tr>
+          <tr><td>OK, I'll take it!</td><td>Tamam, alıyorum!</td><td>almaya karar verince (Ü1 s.11)</td></tr>
+          <tr><td>Can I pay by card?</td><td>Kartla ödeyebilir miyim?</td><td>kasada (Ü2 s.20)</td></tr>
+          <tr><td>How can I help you?</td><td>Nasıl yardımcı olabilirim?</td><td>satıcı, görevli sorar (Ü3 s.28)</td></tr>
+          <tr class="group"><td colspan="3">Rica ve cevap</td></tr>
+          <tr><td>Could you help me, please?</td><td>Bana yardım eder misiniz?</td><td>yardım isterken (Ü5 s.44)</td></tr>
+          <tr><td>Can I borrow your charger?</td><td>Şarj aletini ödünç alabilir miyim?</td><td>ödünç isterken (Ü5 s.44)</td></tr>
+          <tr><td>Sure, no problem.</td><td>Tabii, sorun değil</td><td>ricaya evet (Ü5 s.44)</td></tr>
+          <tr><td>Yes, of course. / Certainly.</td><td>Tabii ki</td><td>ricaya evet (Ü3 s.28)</td></tr>
+          <tr><td>I'm afraid not.</td><td>Maalesef hayır</td><td>kibarca hayır (Ü5 s.44)</td></tr>
+          <tr><td>I'm sorry.</td><td>Kusura bakma, üzgünüm</td><td>özür dilerken (Ü3 s.28)</td></tr>
+          <tr class="group"><td colspan="3">Yer ve saat</td></tr>
+          <tr><td>Where's the ...?</td><td>... nerede?</td><td>yer sorarken (Ü2 s.20)</td></tr>
+          <tr><td>Is there a ... near here?</td><td>Yakında ... var mı?</td><td>yer ararken (Ü4 s.36)</td></tr>
+          <tr><td>What time is it?</td><td>Saat kaç?</td><td>(Ü1 s.12)</td></tr>
+          <tr><td>What time does ... open?</td><td>... saat kaçta açılıyor?</td><td>dükkân, spor salonu (Ü4 s.36)</td></tr>
+          <tr class="group"><td colspan="3">Sohbet</td></tr>
+          <tr><td>Me too! · And you?</td><td>Ben de! · Ya sen?</td><td>sohbette (Ü3 s.23)</td></tr>
+          <tr><td>That's great! · Oh no!</td><td>Harika! · Eyvah!</td><td>tepki verirken (Ü5 s.41)</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </section>
+
+  <footer>Kaynak: Roadmap A2 Students' Book (Pearson, 2020) s.11-12, s.19-20, s.23-25, s.28, s.36, s.41, s.44, s.118. Alıştırma cümleleri bu sayfa için yazıldı, kitaptaki alıştırmaların ya da online ödevin cevapları değildir.</footer>
+</div>
+
+<script>
+(function () {
+  function norm(s) {
+    return s.toLowerCase().replace(/[’‘`]/g, "'").replace(/[.!?,"]/g, '').replace(/\s+/g, ' ').trim();
+  }
+  document.querySelectorAll('[data-drill]').forEach(function (drill) {
+    var qs = Array.prototype.slice.call(drill.querySelectorAll('.q'));
+    var score = drill.querySelector('.score');
+    function answers(inp) { return inp.getAttribute('data-ans').split('|'); }
+    function check() {
+      var right = 0;
+      qs.forEach(function (q) {
+        var inp = q.querySelector('input');
+        var fb = q.querySelector('.fb');
+        var val = norm(inp.value);
+        inp.classList.remove('ok', 'no');
+        fb.textContent = '';
+        if (!val) return;
+        var ok = answers(inp).some(function (a) { return norm(a) === val; });
+        inp.classList.add(ok ? 'ok' : 'no');
+        if (ok) right++;
+        else { fb.innerHTML = 'Doğrusu: <span class="a"></span>'; fb.querySelector('.a').textContent = answers(inp)[0]; }
+      });
+      score.textContent = right + ' / ' + qs.length + ' doğru';
+    }
+    drill.querySelector('[data-check]').addEventListener('click', check);
+    drill.querySelector('[data-show]').addEventListener('click', function () {
+      qs.forEach(function (q) {
+        var inp = q.querySelector('input');
+        var fb = q.querySelector('.fb');
+        fb.innerHTML = 'Cevap: <span class="a"></span>';
+        fb.querySelector('.a').textContent = answers(inp)[0];
+      });
+    });
+    drill.querySelector('[data-reset]').addEventListener('click', function () {
+      qs.forEach(function (q) {
+        var inp = q.querySelector('input');
+        inp.value = '';
+        inp.classList.remove('ok', 'no');
+        q.querySelector('.fb').textContent = '';
+      });
+      score.textContent = '';
+    });
+    qs.forEach(function (q) {
+      q.querySelector('input').addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); check(); } });
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
