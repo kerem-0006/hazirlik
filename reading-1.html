@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Reading Çalışması 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&display=swap">
+<style>
+/* Layout: an exam paper. Wide screens: the passage stays pinned on the left like a printed text sheet, questions scroll on the right. Phones: passage first, questions below. Answers stay hidden until "Kontrol et". */
+:root {
+  --bg: #eef6f5;
+  --sheet: #ffffff;
+  --paper: #fbfaf6;
+  --ink: #16302e;
+  --muted: #5a716f;
+  --teal: #0e8f86;
+  --teal-soft: #d5eeeb;
+  --ans: #c2185b;
+  --ans-bg: #fde6ef;
+  --line: #cfe1df;
+  --good: #1f7a3a;
+  --good-bg: #dff3e4;
+  --bad: #b3261e;
+  --bad-bg: #fbe3e1;
+  --display: "Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
+  --body: "Atkinson Hyperlegible", "Helvetica Neue", Arial, sans-serif;
+  --text: "Literata", Georgia, "Times New Roman", serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0d1a19; --sheet: #142624; --paper: #18292a; --ink: #e3efed; --muted: #93aaa7;
+    --teal: #3cc2b6; --teal-soft: #1b3835; --ans: #ff7eb0; --ans-bg: #3a1a28;
+    --line: #24403d; --good: #7fd69a; --good-bg: #173523; --bad: #ff8a80; --bad-bg: #3d1a17;
+    color-scheme: dark;
+  }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 17px; line-height: 1.55; }
+.wrap { max-width: 1180px; margin: 0 auto; padding-inline: 16px; padding-block: 28px 56px; display: grid; gap: 22px; }
+
+header { display: grid; gap: 10px; }
+.back { font-size: 14px; color: var(--teal); text-decoration: none; font-weight: 700; }
+.eyebrow { font: 700 12px/1 var(--body); letter-spacing: .12em; text-transform: uppercase; color: var(--teal); }
+h1 { font: 800 clamp(34px, 7vw, 54px)/1.02 var(--display); margin: 0; text-wrap: balance; letter-spacing: -.01em; }
+h1 span { color: var(--teal); }
+.meta { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { background: var(--sheet); border: 1px solid var(--line); border-radius: 999px; padding: 5px 12px; font-size: 14px; }
+.chip b { color: var(--teal); }
+.howto { margin: 0; color: var(--muted); max-width: 70ch; font-size: 15px; }
+
+.grid { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 22px; align-items: start; }
+
+.passage { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 12px); max-height: calc(100vh - 24px); overflow: auto; background: var(--paper); border: 1px solid var(--line); border-radius: 14px; padding: 22px 24px; }
+.passage h2 { font: 600 28px/1.15 var(--text); margin: 0 0 4px; }
+.passage .sub { font-size: 13px; color: var(--muted); margin: 0 0 14px; }
+.para { display: grid; grid-template-columns: 1.8em 1fr; gap: 6px; margin: 0 0 12px; font-family: var(--text); font-size: 17px; line-height: 1.7; }
+.para .pn { font: 800 14px/1.9 var(--display); color: var(--teal); }
+.para p { margin: 0; }
+.ref { border-bottom: 2px solid var(--teal); font-weight: 600; }
+.voc { border-bottom: 2px dotted var(--ans); font-weight: 600; }
+.tag { font: 700 10px/1 var(--body); vertical-align: super; color: var(--sheet); background: var(--teal); border-radius: 4px; padding: 2px 4px; margin-left: 2px; }
+.voc + .tag { background: var(--ans); }
+
+.qs { display: grid; gap: 14px; }
+.q { background: var(--sheet); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; display: grid; gap: 10px; }
+.q-head { display: flex; gap: 10px; align-items: baseline; }
+.q-num { font: 800 26px/1 var(--display); color: var(--teal); min-width: 1.3em; }
+.q-type { font: 700 11px/1 var(--body); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); border: 1px solid var(--line); border-radius: 6px; padding: 4px 7px; white-space: nowrap; }
+.q-text { margin: 0; font-weight: 700; }
+.q-text em { font-family: var(--text); font-weight: 600; }
+.opts { display: grid; gap: 6px; }
+.opt { display: grid; grid-template-columns: 1.9em 1fr; gap: 8px; align-items: start; border: 2px solid var(--line); border-radius: 10px; padding: 8px 10px; cursor: pointer; background: var(--sheet); }
+.opt:hover { border-color: var(--teal); }
+.opt input { position: absolute; opacity: 0; pointer-events: none; }
+.opt .l { font: 800 14px/1.6 var(--display); color: var(--teal); text-transform: uppercase; }
+.opt:has(input:checked) { border-color: var(--teal); background: var(--teal-soft); }
+.opt:has(input:focus-visible) { outline: 3px solid var(--ans); outline-offset: 2px; }
+.opt.right { border-color: var(--good); background: var(--good-bg); }
+.opt.wrong { border-color: var(--bad); background: var(--bad-bg); }
+.opt.right .l, .opt.wrong .l { color: inherit; }
+.fb { font-size: 15px; border-left: 3px solid var(--ans); padding-left: 12px; display: grid; gap: 4px; }
+.fb .res { font-weight: 700; }
+.fb .res.ok { color: var(--good); }
+.fb .res.no { color: var(--bad); }
+
+.bar { position: sticky; bottom: 0; padding-bottom: env(safe-area-inset-bottom, 0px); }
+.bar-in { background: var(--sheet); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; box-shadow: 0 6px 24px rgba(0,0,0,.08); }
+.score { font: 800 20px/1 var(--display); font-variant-numeric: tabular-nums; }
+.score small { font: 400 14px var(--body); color: var(--muted); }
+.btns { display: flex; flex-wrap: wrap; gap: 8px; }
+.btn { font: 700 15px var(--body); border-radius: 999px; padding: 9px 18px; cursor: pointer; border: 2px solid var(--teal); }
+.btn.primary { background: var(--teal); color: var(--sheet); }
+.btn.ghost { background: transparent; color: var(--teal); }
+.btn:focus-visible { outline: 3px solid var(--ans); outline-offset: 2px; }
+footer { font-size: 13px; color: var(--muted); }
+
+@media (max-width: 860px) {
+  .grid { grid-template-columns: 1fr; }
+  .passage { position: static; max-height: none; }
+}
+@media (max-width: 520px) {
+  body { font-size: 16px; }
+  .passage { padding: 18px 16px; }
+  .para { font-size: 16px; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a class="back" href="index.html">← Çalışma sayfaları</a>
+    <span class="eyebrow">Elementary · Reading</span>
+    <h1>Reading <span>Çalışması</span> 1</h1>
+    <div class="meta">
+      <span class="chip"><b>10</b> soru</span>
+      <span class="chip">önerilen süre <b>25</b> dakika</span>
+      <span class="chip"><b>3</b> referans · <b>2</b> kelime · <b>5</b> yorum</span>
+    </div>
+    <p class="howto">Metni oku, soruları cevapla, en altta "Kontrol et"e bas. Altı düz çizili kelimeler referans sorularında, altı noktalı kelimeler kelime sorularında soruluyor. Yanındaki numara, sorunun numarası.</p>
+  </header>
+
+  <div class="grid">
+    <article class="passage" aria-label="Okuma metni">
+      <h2>The Night Bus</h2>
+      <p class="sub">Paragraf numaraları solda.</p>
+
+      <div class="para"><span class="pn">1</span><p>At three o'clock in the morning, most people in the city are asleep. Nadia Brooks isn't. She is a bus driver, and she drives the N7 night bus from the city centre to the airport and back again. She starts work at eleven o'clock at night and finishes at seven in the morning. "People think the night is quiet," she says, "but my bus is never empty."</p></div>
+
+      <div class="para"><span class="pn">2</span><p>Her passengers are very different. Some are nurses, cleaners and cooks. They finish work late or start very early, so the night bus is the only way for them to get to work or go home. Others are students after a party, or travellers with big suitcases on their way to catch a plane. Nadia always has two small bags of sweets next to her seat. One bag is for the travellers' children, and the other is for the night workers. "The workers love <span class="ref">them</span><span class="tag">3</span> more than the children!" she laughs.</p></div>
+
+      <div class="para"><span class="pn">3</span><p>The N7 is twelve years old, and in winter the heating sometimes doesn't work. But the bus is always <span class="voc">spotless</span><span class="tag">4</span>. Nadia cleans the seats and the floor before every journey, and you never see any rubbish. Sometimes a passenger falls asleep and misses their stop. Nadia never gets angry about <span class="ref">it</span><span class="tag">5</span>. When the bus gets to the airport, she wakes the passenger up and tells them the time of the next bus back.</p></div>
+
+      <div class="para"><span class="pn">4</span><p>Many passengers are <span class="voc">grateful</span><span class="tag">6</span>. They often say "Thank you, Nadia!" when they get off, and an old man called Mr Patel sometimes brings her a cup of coffee from the airport café. Nadia knows a lot of her passengers' names, and they know hers.</p></div>
+
+      <div class="para"><span class="pn">5</span><p>Nadia lives with her eleven-year-old daughter, Lily, and her mother, Rosa. When Nadia gets home at half past seven, Rosa is always in the kitchen and Lily is in her bedroom with her school books. They have breakfast together, and then Nadia goes to bed. <span class="ref">She</span><span class="tag">8</span> is usually asleep before Lily leaves for school.</p></div>
+
+      <div class="para"><span class="pn">6</span><p>"My friends often ask me, 'Why don't you get a day job?'" says Nadia. "But I like my hours, and I love the people on my bus. They are my night family."</p></div>
+    </article>
+
+    <section class="qs" id="qs" aria-label="Sorular"></section>
+  </div>
+
+  <div class="bar">
+    <div class="bar-in">
+      <div class="score" id="score" aria-live="polite">— <small>/ 10</small></div>
+      <div class="btns">
+        <button class="btn primary" type="button" id="check">Kontrol et</button>
+        <button class="btn ghost" type="button" id="show">Cevapları göster</button>
+        <button class="btn ghost" type="button" id="reset">Baştan başla</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>Metin ve sorular bu çalışma için yazıldı. Okulun sınavlarından ya da ders kitabından alınmadı. Metindeki kişiler hayalidir.</footer>
+</div>
+
+<script>
+(function () {
+  var Q = [
+    { type: 'Yorum', text: 'In paragraph 1, Nadia says, "My bus is never empty." Which information in the text supports this?',
+      opts: ['The bus is twelve years old.', 'Different people use the bus at different times of the night: workers, students and travellers.', 'Nadia cleans the bus before every journey.', 'Nadia has breakfast with her family.'],
+      a: 1, why: 'Paragraf 2: işçiler gece geç ya da sabah çok erken, öğrenciler partiden sonra, yolcular uçağa giderken biniyor. Gecenin her saatinde birileri var, bu yüzden otobüs hiç boş kalmıyor.' },
+    { type: 'Yorum', text: 'Why is the night bus important for nurses, cleaners and cooks?',
+      opts: ['They like going to the airport.', 'They want to get sweets from Nadia.', 'Their working hours are late at night or very early, and there is no other way to travel.', 'They haven’t got a home.'],
+      a: 2, why: 'Paragraf 2: "They finish work late or start very early, so the night bus is the only way for them to get to work or go home." Çalışma saatleri yüzünden başka seçenekleri yok.' },
+    { type: 'Referans', text: 'In paragraph 2, what does <em>them</em> refer to?',
+      opts: ['the travellers’ children', 'the night workers', 'the travellers', 'the sweets'],
+      a: 3, why: '"The workers love them more than the children." Öznede zaten "the workers" var, yani them işçiler olamaz. Çocuklarla karşılaştırılıyorlar, yani çocuklar da olamaz. İşçilerin ve çocukların sevdiği şey, iki torba şeker: them = the sweets.' },
+    { type: 'Kelime', text: 'In paragraph 3, what does <em>spotless</em> mean?',
+      opts: ['very clean', 'very old', 'very cold', 'very full'],
+      a: 0, why: 'Hemen arkasından gelen cümle açıklıyor: Nadia her seferden önce koltukları ve yeri temizliyor, hiç çöp görmüyorsun. Old ve cold tuzak: önceki cümlede otobüs eski ve kışın soğuk, ama "But" ile tersine dönüyor.' },
+    { type: 'Referans', text: 'In paragraph 3, what does <em>it</em> refer to?',
+      opts: ['the heating', 'the bus', 'a passenger sleeping and missing their stop', 'the airport'],
+      a: 2, why: '"Sometimes a passenger falls asleep and misses their stop. Nadia never gets angry about it." Nadia’nın kızmadığı şey bir nesne değil, bir olay: yolcunun uyuyup durağını kaçırması.' },
+    { type: 'Kelime', text: 'In paragraph 4, what does <em>grateful</em> mean?',
+      opts: ['tired after a long journey', 'thankful because someone helps them', 'angry because the bus is late', 'worried about their plane'],
+      a: 1, why: 'Sonraki cümle örnek veriyor: yolcular "Thank you, Nadia!" diyor, Mr Patel ona kahve getiriyor. Teşekkür eden, minnettar insanlar: grateful = thankful.' },
+    { type: 'Yorum', text: '"Nadia knows a lot of her passengers’ names, and they know hers." What does this tell us?',
+      opts: ['The passengers work with Nadia.', 'Nadia writes all the names on a list.', 'The passengers don’t like Nadia.', 'Many passengers use her bus often, and they have a friendly relationship.'],
+      a: 3, why: 'Birbirinin adını bilmek için insanların sık sık görüşmesi gerekir. Aynı yolcular düzenli olarak Nadia’nın otobüsüne biniyor ve aralarında samimi bir ilişki var. Metinde iş arkadaşı ya da liste bilgisi yok.' },
+    { type: 'Referans', text: 'In paragraph 5, who does <em>She</em> refer to?',
+      opts: ['Nadia', 'Rosa', 'Lily', 'a passenger'],
+      a: 0, why: 'Önceki cümle: "then Nadia goes to bed." Uyuyan kişi yatağa giden kişi. Lily olamaz, çünkü cümle "Lily okula gitmeden önce" diyor. Rosa mutfakta, yatmıyor. She = Nadia.' },
+    { type: 'Yorum', text: 'What does Nadia mean when she says, "They are my night family"?',
+      opts: ['Her real family works at night too.', 'She feels close to her passengers, like they are family.', 'Her passengers are her cousins and uncles.', 'She wants to drive a day bus with her family.'],
+      a: 1, why: 'Paragraf 6: Nadia gündüz işi istemiyor çünkü "I love the people on my bus" diyor. Yolcular gerçekten akrabası değil, ama onlara aile gibi yakın hissediyor.' },
+    { type: 'Yorum', text: 'What is the main idea of the text?',
+      opts: ['Night buses are often dirty and cold.', 'Nadia has a difficult family life.', 'Nadia’s night job is not easy, but she likes it and the people on her bus.', 'Many people take the bus to the airport.'],
+      a: 2, why: 'Metnin tamamı Nadia’nın gece işini ve yolcularını anlatıyor. Saatler zor ama son paragrafta işini ve yolcularını sevdiğini söylüyor. Diğer şıklar ya yanlış (otobüs temiz, ailesiyle sorun yok) ya da tek bir ayrıntı.' }
+  ];
+  var L = ['a', 'b', 'c', 'd'];
+  var box = document.getElementById('qs');
+
+  Q.forEach(function (q, i) {
+    var el = document.createElement('div');
+    el.className = 'q';
+    el.innerHTML = '<div class="q-head"><span class="q-num">' + (i + 1) + '</span><p class="q-text"></p></div><div class="opts" role="radiogroup"></div><div class="fb" hidden></div>';
+    el.querySelector('.q-text').innerHTML = q.text + ' <span class="q-type">' + q.type + '</span>';
+    var opts = el.querySelector('.opts');
+    opts.setAttribute('aria-label', 'Soru ' + (i + 1));
+    q.opts.forEach(function (o, j) {
+      var lab = document.createElement('label');
+      lab.className = 'opt';
+      lab.innerHTML = '<input type="radio" id="q' + i + 'o' + j + '" name="q' + i + '" value="' + j + '"><span class="l">' + L[j] + '</span><span class="t"></span>';
+      lab.querySelector('.t').textContent = o;
+      opts.appendChild(lab);
+    });
+    box.appendChild(el);
+  });
+
+  var cards = Array.prototype.slice.call(box.querySelectorAll('.q'));
+  var score = document.getElementById('score');
+
+  function mark(reveal) {
+    var right = 0;
+    cards.forEach(function (c, i) {
+      var q = Q[i];
+      var labs = c.querySelectorAll('.opt');
+      var picked = c.querySelector('input:checked');
+      var fb = c.querySelector('.fb');
+      labs.forEach(function (l) { l.classList.remove('right', 'wrong'); });
+      var p = picked ? +picked.value : -1;
+      if (p === q.a) right++;
+      if (p === -1 && !reveal) {
+        fb.hidden = false;
+        fb.innerHTML = '<span class="res no">Boş bıraktın.</span>';
+        return;
+      }
+      labs[q.a].classList.add('right');
+      if (p !== -1 && p !== q.a) labs[p].classList.add('wrong');
+      fb.hidden = false;
+      var res = p === q.a ? '<span class="res ok">Doğru.</span>' : (p === -1 ? '<span class="res">Doğru cevap: ' + L[q.a] + '</span>' : '<span class="res no">Doğru cevap: ' + L[q.a] + '</span>');
+      fb.innerHTML = res + '<span></span>';
+      fb.lastChild.textContent = q.why;
+    });
+    score.innerHTML = right + ' <small>/ 10</small>';
+  }
+
+  document.getElementById('check').addEventListener('click', function () { mark(false); });
+  document.getElementById('show').addEventListener('click', function () { mark(true); });
+  document.getElementById('reset').addEventListener('click', function () {
+    cards.forEach(function (c) {
+      c.querySelectorAll('input').forEach(function (inp) { inp.checked = false; });
+      c.querySelectorAll('.opt').forEach(function (l) { l.classList.remove('right', 'wrong'); });
+      var fb = c.querySelector('.fb'); fb.hidden = true; fb.innerHTML = '';
+    });
+    score.innerHTML = '— <small>/ 10</small>';
+    window.scrollTo(0, 0);
+  });
+})();
+</script>
+</body>
+</html>
