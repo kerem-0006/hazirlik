@@ -1,0 +1,742 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ünite 3 Gramer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Literata:ital,opsz,wght@0,7..72,500;1,7..72,500&display=swap">
+<style>
+/* Layout: rule sections (tables, tips) on top, then the same one-question card engine as the word cards. Card: one word card at a time, centred. Above it a slim setup strip (units, direction); below it the hint ladder (sentence, then picture, then answer). A results sheet replaces the card at the end. */
+:root {
+  --bg: #eef6f5;
+  --sheet: #ffffff;
+  --paper: #fbfdfc;
+  --ink: #16302e;
+  --muted: #5a716f;
+  --teal: #0e8f86;
+  --teal-soft: #d5eeeb;
+  --ans: #c2185b;
+  --ans-bg: #fde6ef;
+  --line: #cfe1df;
+  --good: #1f7a3a;
+  --good-bg: #dff3e4;
+  --mid: #9a6a00;
+  --mid-bg: #fdf1d6;
+  --bad: #b3261e;
+  --bad-bg: #fbe3e1;
+  --tile-a: #e4f4f1;
+  --tile-b: #fbe9f0;
+  --display: "Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
+  --body: "Atkinson Hyperlegible", "Helvetica Neue", Arial, sans-serif;
+  --text: "Literata", Georgia, "Times New Roman", serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0d1a19; --sheet: #142624; --paper: #18292a; --ink: #e3efed; --muted: #93aaa7;
+    --teal: #3cc2b6; --teal-soft: #1b3835; --ans: #ff7eb0; --ans-bg: #3a1a28;
+    --line: #24403d; --good: #7fd69a; --good-bg: #173523; --mid: #f0c060; --mid-bg: #3a2e12;
+    --bad: #ff8a80; --bad-bg: #3d1a17; --tile-a: #17322f; --tile-b: #321c27;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0d1a19; --sheet: #142624; --paper: #18292a; --ink: #e3efed; --muted: #93aaa7;
+  --teal: #3cc2b6; --teal-soft: #1b3835; --ans: #ff7eb0; --ans-bg: #3a1a28;
+  --line: #24403d; --good: #7fd69a; --good-bg: #173523; --mid: #f0c060; --mid-bg: #3a2e12;
+  --bad: #ff8a80; --bad-bg: #3d1a17; --tile-a: #17322f; --tile-b: #321c27;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 17px; line-height: 1.55; }
+.wrap { max-width: 720px; margin: 0 auto; padding-inline: 16px; padding-block: 24px 56px; display: grid; gap: 18px; }
+
+header { display: grid; gap: 8px; }
+.back { font-size: 14px; color: var(--teal); text-decoration: none; font-weight: 700; }
+.eyebrow { font: 700 12px/1 var(--body); letter-spacing: .12em; text-transform: uppercase; color: var(--teal); }
+h1 { font: 800 clamp(34px, 8vw, 52px)/1.02 var(--display); margin: 0; letter-spacing: -.01em; }
+h1 span { color: var(--teal); }
+.howto { margin: 0; color: var(--muted); font-size: 15px; max-width: 62ch; }
+
+.setup { background: var(--sheet); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; display: grid; gap: 12px; }
+.row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.row > .lbl { font: 700 12px/1 var(--body); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); min-width: 4.5em; }
+.pill { font: 700 14px var(--body); border: 2px solid var(--line); background: var(--paper); color: var(--ink); border-radius: 999px; padding: 6px 12px; cursor: pointer; }
+.pill small { font-weight: 400; color: var(--muted); margin-left: 4px; }
+.pill[aria-pressed="true"] { border-color: var(--teal); background: var(--teal-soft); color: var(--teal); }
+.pill[aria-pressed="true"] small { color: var(--teal); }
+.pill:focus-visible, .btn:focus-visible, .ans-in:focus-visible { outline: 3px solid var(--ans); outline-offset: 2px; }
+.note { font-size: 13px; color: var(--muted); margin: 0; }
+
+.progress { display: grid; gap: 6px; }
+.progress-top { display: flex; justify-content: space-between; font-size: 14px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.progress-top b { color: var(--ink); }
+.track { height: 8px; border-radius: 999px; background: var(--line); overflow: hidden; }
+.fill { height: 100%; width: 0; background: var(--teal); border-radius: 999px; transition: width .25s ease; }
+.tally { display: flex; gap: 12px; font-size: 13px; }
+.tally span::before { content: ""; display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 5px; vertical-align: 0; }
+.tally .g::before { background: var(--good); }
+.tally .m::before { background: var(--mid); }
+.tally .b::before { background: var(--bad); }
+
+.card { background: var(--sheet); border: 1px solid var(--line); border-radius: 20px; padding: 22px 20px 20px; display: grid; gap: 16px; box-shadow: 0 1px 0 var(--line), 0 18px 40px -28px rgba(14, 60, 56, .35); }
+.card-top { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.chip { font: 700 12px/1 var(--body); letter-spacing: .06em; color: var(--teal); background: var(--teal-soft); border-radius: 999px; padding: 6px 10px; }
+.dir { font-size: 13px; color: var(--muted); }
+.word { font: 800 clamp(38px, 10vw, 60px)/1.05 var(--display); text-align: center; margin: 6px 0 2px; letter-spacing: -.01em; overflow-wrap: anywhere; }
+.word.tr { color: var(--teal); }
+.answer-line { display: flex; gap: 8px; }
+.ans-in { flex: 1; min-width: 0; font: 700 18px var(--body); color: var(--ink); background: var(--paper); border: 2px solid var(--line); border-radius: 12px; padding: 10px 14px; }
+.ans-in.ok { border-color: var(--good); background: var(--good-bg); color: var(--good); }
+.ans-in.mid { border-color: var(--mid); background: var(--mid-bg); color: var(--mid); }
+.ans-in.no { border-color: var(--bad); background: var(--bad-bg); color: var(--bad); }
+.ans-in.shake { animation: shake .3s; }
+@keyframes shake { 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+@media (prefers-reduced-motion: reduce) { .ans-in.shake { animation: none; } .fill { transition: none; } }
+
+.btns { display: flex; flex-wrap: wrap; gap: 8px; }
+.btn { font: 700 15px var(--body); border-radius: 999px; padding: 10px 18px; cursor: pointer; border: 2px solid var(--teal); background: transparent; color: var(--teal); }
+.btn.primary { background: var(--teal); color: var(--sheet); }
+.btn.hint { border-color: var(--ans); color: var(--ans); }
+.btn.quiet { border-color: var(--line); color: var(--muted); }
+.btn[hidden] { display: none; }
+
+.ladder { display: grid; gap: 10px; }
+.step { border-radius: 14px; padding: 14px 16px; display: grid; gap: 6px; }
+.step .k { font: 700 11px/1 var(--body); letter-spacing: .1em; text-transform: uppercase; }
+.s1 { background: var(--paper); border: 1px solid var(--line); }
+.s1 .k { color: var(--teal); }
+.s1 p { margin: 0; font: 500 19px/1.55 var(--text); }
+.s1 mark { background: none; color: var(--ans); font-weight: 700; border-bottom: 2px dotted var(--ans); padding: 0 1px; }
+.s1 .blank { display: inline-block; min-width: 5.5em; border-bottom: 2px solid var(--ans); }
+.s2 { background: linear-gradient(135deg, var(--tile-a), var(--tile-b)); border: 1px solid var(--line); justify-items: center; text-align: center; padding: 18px 16px 16px; }
+.s2 .k { color: var(--ans); justify-self: start; }
+.pic { font-size: clamp(64px, 18vw, 96px); line-height: 1.15; letter-spacing: .04em; filter: drop-shadow(0 6px 10px rgba(0, 0, 0, .12)); }
+.cap { font: italic 500 16px/1.4 var(--text); color: var(--muted); }
+.s3 { background: var(--ans-bg); border: 1px solid var(--ans); }
+.s3 .k { color: var(--ans); }
+.s3 .big { font: 800 26px/1.2 var(--display); color: var(--ans); }
+.s3 .alt { font-size: 14px; color: var(--muted); }
+.verdict { font-weight: 700; font-size: 15px; }
+.verdict.ok { color: var(--good); }
+.verdict.mid { color: var(--mid); }
+.verdict.no { color: var(--bad); }
+.fixlink { font: 700 13px var(--body); color: var(--muted); background: none; border: 0; padding: 0; text-decoration: underline; cursor: pointer; justify-self: start; }
+
+.result { background: var(--sheet); border: 1px solid var(--line); border-radius: 20px; padding: 22px 20px; display: grid; gap: 16px; }
+.result h2 { font: 800 30px/1.1 var(--display); margin: 0; }
+.stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.stat { border-radius: 14px; padding: 12px; text-align: center; }
+.stat b { display: block; font: 800 34px/1 var(--display); font-variant-numeric: tabular-nums; }
+.stat span { font-size: 13px; }
+.stat.g { background: var(--good-bg); color: var(--good); }
+.stat.m { background: var(--mid-bg); color: var(--mid); }
+.stat.b { background: var(--bad-bg); color: var(--bad); }
+.miss { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; }
+.miss li { display: flex; justify-content: space-between; gap: 12px; border-bottom: 1px solid var(--line); padding: 6px 0; }
+.miss li b { font-family: var(--display); }
+.miss li span { color: var(--muted); text-align: right; }
+.result h3 { font: 800 18px/1.2 var(--display); margin: 0; }
+footer { font-size: 13px; color: var(--muted); }
+@media (max-width: 520px) {
+  body { font-size: 16px; }
+  .card, .result { padding: 18px 14px 16px; border-radius: 16px; }
+  .answer-line { flex-direction: column; }
+  .btn { flex: 1 1 auto; text-align: center; }
+}
+
+.toc { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; margin-top: 4px; }
+.toc a { display: block; background: var(--sheet); border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; color: inherit; text-decoration: none; font-size: 14px; line-height: 1.3; min-width: 0; }
+.toc a:hover { border-color: var(--teal); }
+.toc a b { display: block; font: 800 22px/1 var(--display); color: var(--teal); margin-bottom: 4px; }
+.toc a small { display: block; color: var(--muted); font-size: 12px; margin-top: 2px; }
+.toc a.go { background: var(--teal); border-color: var(--teal); color: var(--sheet); }
+.toc a.go b, .toc a.go small { color: var(--sheet); }
+.rule-sec { background: var(--sheet); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; scroll-margin-top: 14px; }
+.rh { display: flex; gap: 14px; align-items: flex-start; padding: 16px 18px; background: var(--teal-soft); }
+.rn { font: 800 34px/1 var(--display); color: var(--teal); min-width: 1.1em; }
+.rh h2 { font: 800 22px/1.2 var(--display); margin: 0; }
+.rh p { margin: 4px 0 0; font-size: 15px; color: var(--muted); }
+.rb { padding: 14px 18px 18px; display: grid; gap: 14px; }
+.tbl { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 15px; }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+td b { color: var(--ans); }
+.tips { display: grid; gap: 6px; }
+.tips p { margin: 0; font-size: 15px; }
+.tips .t { color: var(--teal); font-weight: 700; }
+.tips b { color: var(--ans); }
+.quad { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.cell { border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; display: grid; gap: 4px; background: linear-gradient(135deg, var(--tile-a), var(--tile-b)); }
+.cell .cl { font: 700 11px/1 var(--body); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.cell b { font: 800 28px/1.1 var(--display); color: var(--ans); }
+.cell i { font-family: var(--text); }
+.task { font: 600 clamp(22px, 5.5vw, 30px)/1.35 var(--text); text-align: center; margin: 4px 0; overflow-wrap: anywhere; }
+.gap { color: var(--ans); letter-spacing: .05em; }
+.step.ex { justify-items: start; text-align: left; }
+.exs { margin: 0; font: 500 19px/1.5 var(--text); }
+@media (max-width: 620px) { .toc { grid-template-columns: repeat(2, minmax(0, 1fr)); } .toc a.go { grid-column: 1 / -1; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a class="back" href="index.html">← Çalışma sayfaları</a>
+    <span class="eyebrow">Roadmap A2 · Ünite 3 · gramer</span>
+    <h1>Ünite 3 <span>gramer</span></h1>
+    <p class="howto">Önce dört konunun kuralını oku. Sonra aşağıdaki kartlarda soruları tek tek cevapla. Bilemezsen İpucu 1 kuralı, İpucu 2 benzer bir örnek cümleyi gösterir, en sonda cevap ve açıklama açılır.</p>
+    <nav class="toc" aria-label="Konular">
+      <a href="#k1"><b>1</b>geniş zaman: I, you, we, they<small>s.23</small></a>
+      <a href="#k2"><b>2</b>sıklık: always, never...<small>s.23</small></a>
+      <a href="#k3"><b>3</b>he, she, it + s<small>s.25</small></a>
+      <a href="#k4"><b>4</b>do / does ile soru<small>s.26</small></a>
+      <a href="#quiz" class="go"><b>→</b>Kartlara geç<small>32 soru</small></a>
+    </nav>
+  </header>
+
+  <section class="rule-sec" id="k1">
+    <div class="rh"><span class="rn">1</span><div><h2>Geniş zaman: I · you · we · they</h2><p>Her zaman doğru olan ve düzenli yaptığın şeyler için. Türkçedeki "-r, -ar, -er": okurum, giderim.</p></div></div>
+    <div class="rb">
+      <div class="tbl"><table>
+        <thead><tr><th></th><th>Kim</th><th>Fiil</th><th>Örnek</th></tr></thead>
+        <tbody>
+          <tr><td>+</td><td>I · you · we · they</td><td>yalın fiil</td><td>I <b>go</b> online every day.</td></tr>
+          <tr><td>−</td><td>I · you · we · they</td><td><b>don't</b> + yalın fiil</td><td>We <b>don't play</b> football.</td></tr>
+        </tbody>
+      </table></div>
+      <div class="tips">
+        <p><span class="t">En sık hata:</span> geniş zamanda <b>am / is / are</b> yok. "They are go" değil, <b>They go</b>. "We are not play" değil, <b>We don't play</b>.</p>
+        <p><span class="t">Zaman ifadesi sona:</span> I read books <b>at the weekend</b>. · I go to the gym <b>three times a week</b>.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="rule-sec" id="k2">
+    <div class="rh"><span class="rn">2</span><div><h2>Sıklık: always · usually · often · sometimes · never</h2><p>Ne kadar sık yaptığını söyler. Yerine dikkat: ana fiilden önce, ama be ve don't'tan sonra.</p></div></div>
+    <div class="rb">
+      <div class="quad">
+        <div class="cell"><span class="cl">%100</span><b>always</b><i>her zaman</i></div>
+        <div class="cell"><span class="cl">%80</span><b>usually</b><i>genellikle</i></div>
+        <div class="cell"><span class="cl">%60</span><b>often</b><i>sık sık</i></div>
+        <div class="cell"><span class="cl">%40</span><b>sometimes</b><i>bazen</i></div>
+        <div class="cell"><span class="cl">%10</span><b>rarely</b><i>nadiren</i></div>
+        <div class="cell"><span class="cl">%0</span><b>never</b><i>asla, hiç</i></div>
+      </div>
+      <div class="tbl"><table>
+        <thead><tr><th>Nereye</th><th>Örnek</th></tr></thead>
+        <tbody>
+          <tr><td>ana fiilden önce</td><td>I <b>always</b> go to the gym.</td></tr>
+          <tr><td>be (am/is/are) fiilinden sonra</td><td>I'm <b>usually</b> busy.</td></tr>
+          <tr><td>don't / doesn't'tan sonra</td><td>We don't <b>often</b> go out.</td></tr>
+        </tbody>
+      </table></div>
+      <div class="tips">
+        <p><span class="t">Kalıplar:</span> <b>every</b> önce gelir: every day, every night. Kaç kez: once / twice / three times <b>a</b> week ("on a week" değil).</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="rule-sec" id="k3">
+    <div class="rh"><span class="rn">3</span><div><h2>he · she · it: fiile -s</h2><p>Ünitenin en önemli kuralı. Özne he, she ya da it ise olumlu cümlede fiile -s gelir.</p></div></div>
+    <div class="rb">
+      <div class="tbl"><table>
+        <thead><tr><th>Fiilin sonu</th><th>Ek</th><th>Örnek</th></tr></thead>
+        <tbody>
+          <tr><td>çoğu fiil</td><td><b>-s</b></td><td>work → work<b>s</b> · like → like<b>s</b></td></tr>
+          <tr><td>-s, -sh, -ch, -x, -o</td><td><b>-es</b></td><td>watch → watch<b>es</b> · go → go<b>es</b> · finish → finish<b>es</b></td></tr>
+          <tr><td>sessiz harf + y</td><td>y düşer, <b>-ies</b></td><td>study → stud<b>ies</b> · carry → carr<b>ies</b></td></tr>
+          <tr><td>have</td><td>düzensiz</td><td>have → <b>has</b></td></tr>
+        </tbody>
+      </table></div>
+      <div class="tips">
+        <p><span class="t">Olumsuz:</span> <b>doesn't</b> + yalın fiil. She <b>doesn't like</b> coffee.</p>
+        <p><span class="t">-s tek bir kere gelir:</span> doesn't aldıysa fiil almaz. "He doesn't plays" yanlış, <b>He doesn't play</b> doğru. has da olumsuzda <b>doesn't have</b> olur.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="rule-sec" id="k4">
+    <div class="rh"><span class="rn">4</span><div><h2>do / does ile soru</h2><p>Geniş zamanda soru <b>Do</b> ya da <b>Does</b> ile başlar. Cümlede fiil varsa is değil do/does kullanılır.</p></div></div>
+    <div class="rb">
+      <div class="tbl"><table>
+        <thead><tr><th>Kim</th><th>Soru</th><th>Kısa cevap</th></tr></thead>
+        <tbody>
+          <tr><td>I · you · we · they</td><td><b>Do</b> you play the guitar?</td><td>Yes, I <b>do</b>. · No, I <b>don't</b>.</td></tr>
+          <tr><td>he · she · it</td><td><b>Does</b> she work here?</td><td>Yes, she <b>does</b>. · No, she <b>doesn't</b>.</td></tr>
+        </tbody>
+      </table></div>
+      <div class="tips">
+        <p><span class="t">Soruda fiil yalın:</span> Does he <b>work</b>? ("works" değil, -s does'ta).</p>
+        <p><span class="t">Soru kelimesiyle:</span> soru kelimesi + do/does + özne + fiil. <b>How often do</b> you go to the gym? · <b>What does</b> he do?</p>
+        <p><span class="t">is mi does mu?</span> Fiil yoksa is: <b>Is</b> he tired? Fiil varsa does: <b>Does</b> he go...?</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="setup" id="quiz" aria-label="Kartlar">
+    <div class="row" id="topics"><span class="lbl">Konu</span></div>
+    <div class="row"><span class="lbl">Sıra</span>
+      <button class="pill" type="button" id="shuffle" aria-pressed="false">Konu sırası</button>
+      <button class="btn primary" type="button" id="start">Kartlara başla</button>
+    </div>
+    <p class="note" id="setnote"></p>
+  </section>
+
+  <div class="progress" id="progress" hidden>
+    <div class="progress-top"><span><b id="pos">1</b> / <span id="tot">0</span></span><span class="tally"><span class="g" id="tg">0</span><span class="m" id="tm">0</span><span class="b" id="tb">0</span></span></div>
+    <div class="track"><div class="fill" id="fill"></div></div>
+  </div>
+
+  <article class="card" id="card" hidden aria-live="polite">
+    <div class="card-top"><span class="chip" id="cat"></span><span class="dir" id="dirlbl"></span></div>
+    <div class="task" id="task"></div>
+    <div class="answer-line">
+      <input class="ans-in" id="ans" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Cevabın">
+      <button class="btn primary" type="button" id="check">Kontrol et</button>
+    </div>
+    <div class="ladder" id="ladder"></div>
+    <div class="btns">
+      <button class="btn hint" type="button" id="hint">İpucu 1 · kural</button>
+      <button class="btn primary" type="button" id="next" hidden>Sonraki →</button>
+      <button class="btn quiet" type="button" id="quit">Bitir</button>
+    </div>
+  </article>
+
+  <section class="result" id="result" hidden aria-live="polite"></section>
+
+  <footer>Kurallar Roadmap A2 Ünite 3 gramer kutularından (s.23, s.25, s.26) özetlendi. Sorular ve örnek cümleler bu çalışma için yazıldı; kişiler hayalidir.</footer>
+</div>
+
+<script>
+(function () {
+  // konu: [soru tipi, görev (___ boşluk), kabul edilen cevaplar (| ile), İpucu 1 kural, İpucu 2 örnek, açıklama]
+  var T = [
+ {
+  "t": "geniş zaman: I, you, we, they",
+  "q": [
+   [
+    "Boşluğu doldur (go)",
+    "I ___ online every day.",
+    "go",
+    "I, you, we, they → yalın fiil",
+    "We meet friends on Fridays.",
+    "I ile fiil yalın: go."
+   ],
+   [
+    "Boşluğu doldur (meet)",
+    "My friends ___ at a café on Fridays.",
+    "meet",
+    "my friends = they → yalın fiil",
+    "My parents work in a shop.",
+    "Çoğul özne, fiil yalın: meet."
+   ],
+   [
+    "Olumsuz yap",
+    "We play football.",
+    "We don't play football.|We do not play football.",
+    "Olumsuz: don't + yalın fiil",
+    "They don't watch TV.",
+    "We don't play football."
+   ],
+   [
+    "Olumsuz yap",
+    "I watch TV in the morning.",
+    "I don't watch TV in the morning.|I do not watch TV in the morning.",
+    "Olumsuz: don't + yalın fiil",
+    "I don't drink coffee.",
+    "I don't watch TV..."
+   ],
+   [
+    "Boşluğu doldur (not / like)",
+    "You ___ coffee.",
+    "don't like|do not like",
+    "Olumsuz: don't + yalın fiil",
+    "We don't like rain.",
+    "don't like."
+   ],
+   [
+    "Düzelt",
+    "They are go to school.",
+    "They go to school.",
+    "Geniş zamanda am/is/are yok",
+    "We go to work.",
+    "are fazla: They go to school."
+   ],
+   [
+    "Düzelt",
+    "We are not play football.",
+    "We don't play football.|We do not play football.",
+    "Olumsuz don't ile yapılır, are not ile değil",
+    "They don't play tennis.",
+    "We don't play football."
+   ],
+   [
+    "Cümle kur",
+    "I / read books / at the weekend",
+    "I read books at the weekend.|At the weekend I read books.|At the weekend, I read books.",
+    "Özne + fiil + gerisi, zaman ifadesi sonda",
+    "I go to the gym in the evening.",
+    "I read books at the weekend."
+   ]
+  ]
+ },
+ {
+  "t": "sıklık: always, never...",
+  "q": [
+   [
+    "always'i doğru yere koy",
+    "I go to the gym.",
+    "I always go to the gym.",
+    "Ana fiilden önce",
+    "I always have breakfast.",
+    "Fiilden (go) önce: I always go..."
+   ],
+   [
+    "usually'yi doğru yere koy",
+    "I'm busy.",
+    "I'm usually busy.|I am usually busy.",
+    "be (am/is/are) fiilinden sonra",
+    "She's always happy.",
+    "be'den sonra: I'm usually busy."
+   ],
+   [
+    "often'ı doğru yere koy",
+    "We don't go out.",
+    "We don't often go out.|We do not often go out.",
+    "don't'tan sonra, fiilden önce",
+    "I don't usually cook.",
+    "We don't often go out."
+   ],
+   [
+    "never'ı doğru yere koy",
+    "She drinks coffee.",
+    "She never drinks coffee.",
+    "Ana fiilden önce",
+    "He never eats meat.",
+    "She never drinks coffee."
+   ],
+   [
+    "Düzelt",
+    "I cook dinner night every.",
+    "I cook dinner every night.",
+    "every önce gelir: every night",
+    "I go to school every day.",
+    "every night."
+   ],
+   [
+    "Düzelt",
+    "We go to the gym twice on a week.",
+    "We go to the gym twice a week.",
+    "once / twice / three times + a + zaman",
+    "I call my mum three times a week.",
+    "twice a week (on yok)."
+   ],
+   [
+    "İngilizcesini yaz",
+    "hiçbir zaman, asla (%0)",
+    "never",
+    "Sıklık: always · usually · often · sometimes · rarely · never",
+    "I never eat fish.",
+    "never."
+   ],
+   [
+    "Boşluğu doldur (her zaman)",
+    "He is ___ late.",
+    "always",
+    "%100 = always; be'den sonra gelir",
+    "She is always kind.",
+    "always."
+   ]
+  ]
+ },
+ {
+  "t": "he, she, it + s",
+  "q": [
+   [
+    "Boşluğu doldur (work)",
+    "She ___ in a hospital.",
+    "works",
+    "he/she/it → fiil + s",
+    "He works in a shop.",
+    "She → works."
+   ],
+   [
+    "Boşluğu doldur (watch)",
+    "He ___ TV every evening.",
+    "watches",
+    "-ch ile biten fiil → -es",
+    "She watches films.",
+    "watch → watches."
+   ],
+   [
+    "Boşluğu doldur (go)",
+    "My dad ___ to work by bus.",
+    "goes",
+    "-o ile biten fiil → -es",
+    "She goes to school.",
+    "go → goes."
+   ],
+   [
+    "Boşluğu doldur (study)",
+    "My sister ___ English.",
+    "studies",
+    "sessiz harf + y → -ies",
+    "He carries a big bag.",
+    "study → studies."
+   ],
+   [
+    "Boşluğu doldur (have)",
+    "He ___ lunch at one.",
+    "has",
+    "have → has (düzensiz)",
+    "She has breakfast at eight.",
+    "he → has."
+   ],
+   [
+    "Olumsuz yap",
+    "She likes coffee.",
+    "She doesn't like coffee.|She does not like coffee.",
+    "doesn't + yalın fiil (-s gider)",
+    "He doesn't watch TV.",
+    "likes → doesn't like."
+   ],
+   [
+    "Düzelt",
+    "My brother don't like coffee.",
+    "My brother doesn't like coffee.|My brother does not like coffee.",
+    "he/she/it → doesn't",
+    "My sister doesn't play tennis.",
+    "brother = he: doesn't."
+   ],
+   [
+    "Düzelt",
+    "He doesn't plays tennis.",
+    "He doesn't play tennis.|He does not play tennis.",
+    "-s tek kez: doesn't aldıysa fiil yalın",
+    "She doesn't work here.",
+    "plays → play."
+   ]
+  ]
+ },
+ {
+  "t": "do / does ile soru",
+  "q": [
+   [
+    "Boşluğu doldur",
+    "___ you play the guitar?",
+    "Do",
+    "I, you, we, they → Do",
+    "Do they live here?",
+    "you → Do."
+   ],
+   [
+    "Boşluğu doldur",
+    "___ she work on Saturdays?",
+    "Does",
+    "he, she, it → Does",
+    "Does he like pizza?",
+    "she → Does."
+   ],
+   [
+    "Soru yap",
+    "He lives in İzmir.",
+    "Does he live in İzmir?|Does he live in Izmir?",
+    "Does + özne + yalın fiil",
+    "She works here. → Does she work here?",
+    "lives → Does he live...?"
+   ],
+   [
+    "Soru yap",
+    "They watch films at home.",
+    "Do they watch films at home?",
+    "Do + özne + fiil",
+    "You like music. → Do you like music?",
+    "Do they watch...?"
+   ],
+   [
+    "Kısa cevap ver (evet)",
+    "Does she like music?",
+    "Yes, she does.",
+    "Kısa cevap: Yes, she does.",
+    "Does he play football? Yes, he does.",
+    "Yes, she does."
+   ],
+   [
+    "Kısa cevap ver (hayır)",
+    "Do you play tennis?",
+    "No, I don't.|No, I do not.",
+    "Kısa cevap: No, I don't.",
+    "Do they eat meat? No, they don't.",
+    "you → I: No, I don't."
+   ],
+   [
+    "Boşluğu doldur",
+    "How often ___ you go to the gym?",
+    "do",
+    "Soru kelimesi + do/does + özne + fiil",
+    "What does he do?",
+    "you → do."
+   ],
+   [
+    "Düzelt",
+    "Does he works here?",
+    "Does he work here?",
+    "Soruda fiil yalın, -s does'ta",
+    "Does she like it?",
+    "works → work."
+   ]
+  ]
+ }
+];
+
+  var on = T.map(function () { return true; });
+  var shuffle = false;
+  var deck = [], i = 0, hints = 0, done = false, results = [], tries = 0;
+  var $ = function (id) { return document.getElementById(id); };
+
+  var tb = $('topics');
+  T.forEach(function (t, k) {
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'pill'; b.setAttribute('aria-pressed', 'true');
+    b.innerHTML = (k + 1) + ' · ' + t.t + '<small>' + t.q.length + '</small>';
+    b.addEventListener('click', function () { on[k] = !on[k]; b.setAttribute('aria-pressed', on[k] ? 'true' : 'false'); note(); });
+    tb.appendChild(b);
+  });
+  function note() { var n = 0; T.forEach(function (t, k) { if (on[k]) n += t.q.length; }); $('setnote').textContent = 'Seçili: ' + n + ' soru.'; }
+  note();
+  $('shuffle').addEventListener('click', function () {
+    shuffle = !shuffle; this.setAttribute('aria-pressed', shuffle ? 'true' : 'false'); this.textContent = shuffle ? 'Karışık' : 'Konu sırası';
+  });
+
+  function build(only) {
+    if (only) return only.slice();
+    var out = [];
+    T.forEach(function (t, k) {
+      if (!on[k]) return;
+      t.q.forEach(function (q) { out.push({ k: k, topic: t.t, type: q[0], task: q[1], ok: q[2].split('|'), rule: q[3], ex: q[4], why: q[5] }); });
+    });
+    if (shuffle) for (var a = out.length - 1; a > 0; a--) { var j = Math.floor(Math.random() * (a + 1)); var x = out[a]; out[a] = out[j]; out[j] = x; }
+    return out;
+  }
+  function start(only) {
+    deck = build(only);
+    if (!deck.length) { $('setnote').textContent = 'En az bir konu seç.'; return; }
+    i = 0; results = [];
+    $('result').hidden = true; $('progress').hidden = false; $('card').hidden = false;
+    $('tot').textContent = deck.length; tally(); show();
+    $('progress').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  $('start').addEventListener('click', function () { start(); });
+
+  function esc(s) { return s.replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function norm(s) {
+    return (' ' + s.replace(/İ/g, 'i').replace(/I/g, 'i').toLowerCase().replace(/[’‘`]/g, "'").replace(/ı/g, 'i') + ' ')
+      .replace(/\b(is|are|was|were|do|does)nt\b/g, '$1 not').replace(/\bim\b/g, 'i am')
+      .replace(/\bi'm\b/g, 'i am').replace(/n't\b/g, ' not').replace(/'re\b/g, ' are').replace(/'s\b/g, ' is')
+      .replace(/\bwhat is\b/g, 'what is').replace(/[^a-z0-9' ]/g, ' ').replace(/\s+/g, ' ').trim();
+  }
+  function isRight(input, c) { var a = norm(input); return !!a && c.ok.some(function (o) { return norm(o) === a; }); }
+
+  function show() {
+    var c = deck[i];
+    hints = 0; done = false; tries = 0;
+    $('pos').textContent = i + 1;
+    $('fill').style.width = (i / deck.length * 100) + '%';
+    $('cat').textContent = (c.k + 1) + ' · ' + c.topic;
+    $('dirlbl').textContent = c.type;
+    $('task').innerHTML = esc(c.task).replace(/___/g, '<span class="gap">_____</span>');
+    var a = $('ans'); a.value = ''; a.className = 'ans-in'; a.disabled = false;
+    a.placeholder = /Boşluğu|Zamirle doldur/.test(c.type) ? 'Boşluğa gelen kelime...' : 'Cümlenin tamamını yaz...';
+    $('ladder').innerHTML = '';
+    $('check').hidden = false; $('hint').hidden = false; $('hint').textContent = 'İpucu 1 · kural'; $('next').hidden = true;
+    a.focus({ preventScroll: true });
+  }
+  function addStep(cls, html) { var d = document.createElement('div'); d.className = 'step ' + cls; d.innerHTML = html; $('ladder').appendChild(d); return d; }
+  function stepRule(c) { addStep('s1', '<span class="k">Kural</span><p>' + esc(c.rule) + '</p>'); }
+  function stepEx(c) { addStep('s2 ex', '<span class="k">Benzer örnek</span><p class="exs">' + esc(c.ex) + '</p>'); }
+  function stepAns(c) { addStep('s3', '<span class="k">Cevap</span><div class="big">' + esc(c.ok[0]) + '</div><div class="alt">' + esc(c.why) + '</div>'); }
+
+  $('hint').addEventListener('click', function () {
+    if (done) return;
+    var c = deck[i]; hints++;
+    if (hints === 1) { stepRule(c); this.textContent = 'İpucu 2 · örnek cümle'; }
+    else if (hints === 2) { stepEx(c); this.textContent = 'Cevabı göster'; }
+    else finish(c, 'b');
+    $('ans').focus({ preventScroll: true });
+  });
+  function vt(r) { return r === 'g' ? 'İpucusuz bildin.' : r === 'm' ? 'İpucuyla bildin.' : 'Bu sefer olmadı, kuralı bir daha oku.'; }
+  function finish(c, r) {
+    done = true; results.push({ c: c, r: r });
+    if (hints < 1) stepRule(c);
+    if (hints < 2) stepEx(c);
+    stepAns(c);
+    var v = document.createElement('div');
+    v.innerHTML = '<span class="verdict ' + (r === 'g' ? 'ok' : r === 'm' ? 'mid' : 'no') + '">' + vt(r) + '</span>';
+    $('ladder').appendChild(v);
+    if (r === 'b' && $('ans').value.trim()) {
+      var fx = document.createElement('button'); fx.type = 'button'; fx.className = 'fixlink'; fx.textContent = 'Benim cevabım da doğruydu, doğru say';
+      fx.addEventListener('click', function () {
+        var nr = hints ? 'm' : 'g'; results[results.length - 1].r = nr;
+        v.querySelector('.verdict').className = 'verdict ' + (nr === 'g' ? 'ok' : 'mid'); v.querySelector('.verdict').textContent = vt(nr);
+        $('ans').className = 'ans-in ' + (nr === 'g' ? 'ok' : 'mid'); fx.remove(); tally();
+      });
+      v.appendChild(document.createElement('br')); v.appendChild(fx);
+    }
+    $('ans').className = 'ans-in ' + (r === 'g' ? 'ok' : r === 'm' ? 'mid' : 'no'); $('ans').disabled = true;
+    $('check').hidden = true; $('hint').hidden = true; $('next').hidden = false; $('next').focus({ preventScroll: true });
+    tally();
+  }
+  function check() {
+    if (done) { next(); return; }
+    var c = deck[i], a = $('ans');
+    if (!a.value.trim()) { a.focus(); return; }
+    if (isRight(a.value, c)) { finish(c, hints ? 'm' : 'g'); return; }
+    tries++;
+    a.classList.remove('shake'); void a.offsetWidth; a.classList.add('shake', 'no');
+    if (tries >= 2 && hints >= 2) finish(c, 'b');
+  }
+  $('check').addEventListener('click', check);
+  $('ans').addEventListener('input', function () { this.classList.remove('no'); });
+  $('ans').addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); check(); } });
+  function next() { if (i < deck.length - 1) { i++; show(); } else end(); }
+  $('next').addEventListener('click', next);
+  $('quit').addEventListener('click', end);
+  function tally() {
+    var g = 0, m = 0, b = 0;
+    results.forEach(function (x) { if (x.r === 'g') g++; else if (x.r === 'm') m++; else b++; });
+    $('tg').textContent = g; $('tm').textContent = m; $('tb').textContent = b;
+    return { g: g, m: m, b: b };
+  }
+  function end() {
+    var t = tally(), n = results.length;
+    $('card').hidden = true; $('fill').style.width = '100%';
+    var missed = results.filter(function (x) { return x.r !== 'g'; });
+    var pct = n ? Math.round((t.g + t.m * 0.5) / n * 100) : 0;
+    var by = T.map(function (tp, k) {
+      var rs = results.filter(function (x) { return x.c.k === k; });
+      if (!rs.length) return '';
+      var g = rs.filter(function (x) { return x.r === 'g'; }).length, m = rs.filter(function (x) { return x.r === 'm'; }).length;
+      return '<li><b>' + (k + 1) + ' · ' + esc(tp.t) + '</b><span>' + g + ' ipucusuz · ' + m + ' ipuçlu · ' + (rs.length - g - m) + ' bilemedin</span></li>';
+    }).join('');
+    var html = '<h2>' + n + ' soru çözdün</h2>' +
+      '<div class="stats"><div class="stat g"><b>' + t.g + '</b><span>ipucusuz</span></div><div class="stat m"><b>' + t.m + '</b><span>ipucuyla</span></div><div class="stat b"><b>' + t.b + '</b><span>bilemedin</span></div></div>' +
+      '<p class="note">Puan (ipucusuz + ipuçlunun yarısı) / çözülen: %' + pct + '</p><h3>Konu konu</h3><ul class="miss">' + by + '</ul>';
+    if (missed.length) html += '<h3>Tekrar bakılacaklar</h3><ul class="miss">' + missed.map(function (x) { return '<li><b>' + esc(x.c.task) + '</b><span>' + esc(x.c.ok[0]) + '</span></li>'; }).join('') + '</ul>';
+    html += '<div class="btns">' + (missed.length ? '<button class="btn primary" type="button" id="again">Kaçanları tekrar çöz</button>' : '') +
+      '<button class="btn" type="button" id="copy">Sonucu kopyala</button><button class="btn quiet" type="button" id="restart">Baştan başla</button></div><p class="note" id="copied"></p>';
+    var r = $('result'); r.innerHTML = html; r.hidden = false; r.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (missed.length) $('again').addEventListener('click', function () { start(missed.map(function (x) { return x.c; })); });
+    $('restart').addEventListener('click', function () { r.hidden = true; $('progress').hidden = true; $('quiz').scrollIntoView({ behavior: 'smooth' }); });
+    $('copy').addEventListener('click', function () {
+      var txt = 'Ünite 3 gramer: ' + n + ' soru, ' + t.g + ' ipucusuz, ' + t.m + ' ipucuyla, ' + t.b + ' bilemedim (%' + pct + ').' + (missed.length ? ' Kaçanlar: ' + missed.map(function (x) { return x.c.task; }).join(' / ') : '');
+      var ok = function () { $('copied').textContent = 'Kopyalandı. MARS\'a yapıştırabilirsin.'; };
+      try { navigator.clipboard.writeText(txt).then(ok, function () { $('copied').textContent = txt; }); } catch (e) { $('copied').textContent = txt; }
+    });
+  }
+})();
+</script>
+</body>
+</html>
