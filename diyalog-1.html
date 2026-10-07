@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Customer ve Assistant</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap">
+<style>
+/* Three customer/assistant dialogues for Quiz 1. Each one has three steps: listen (browser speech, two voices) and answer, put the lines in order, act it out (the page speaks the other role, Kerem speaks or types his line). */
+:root {
+  --bg: #eef6f5; --sheet: #ffffff; --paper: #fbfdfc; --ink: #16302e; --muted: #5a716f;
+  --teal: #0e8f86; --teal-soft: #d5eeeb; --ans: #c2185b; --ans-bg: #fde6ef; --line: #cfe1df;
+  --good: #1f7a3a; --good-bg: #dff3e4; --mid: #9a6a00; --mid-bg: #fdf1d6; --bad: #b3261e; --bad-bg: #fbe3e1;
+  --asst: #e4f4f1; --cust: #fbe9f0;
+  --display: "Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
+  --body: "Atkinson Hyperlegible", "Helvetica Neue", Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0d1a19; --sheet: #142624; --paper: #18292a; --ink: #e3efed; --muted: #93aaa7;
+    --teal: #3cc2b6; --teal-soft: #1b3835; --ans: #ff7eb0; --ans-bg: #3a1a28; --line: #24403d;
+    --good: #7fd69a; --good-bg: #173523; --mid: #f0c060; --mid-bg: #3a2e12; --bad: #ff8a80; --bad-bg: #3d1a17;
+    --asst: #17322f; --cust: #321c27; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0d1a19; --sheet: #142624; --paper: #18292a; --ink: #e3efed; --muted: #93aaa7;
+  --teal: #3cc2b6; --teal-soft: #1b3835; --ans: #ff7eb0; --ans-bg: #3a1a28; --line: #24403d;
+  --good: #7fd69a; --good-bg: #173523; --mid: #f0c060; --mid-bg: #3a2e12; --bad: #ff8a80; --bad-bg: #3d1a17;
+  --asst: #17322f; --cust: #321c27; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 17px; line-height: 1.55; }
+.wrap { max-width: 720px; margin: 0 auto; padding: 24px 16px 56px; display: grid; gap: 18px; }
+header { display: grid; gap: 8px; }
+.back { font-size: 14px; color: var(--teal); text-decoration: none; font-weight: 700; }
+.eyebrow { font: 700 12px/1 var(--body); letter-spacing: .12em; text-transform: uppercase; color: var(--teal); }
+h1 { font: 800 clamp(32px, 8vw, 48px)/1.04 var(--display); margin: 0; }
+h1 span { color: var(--teal); }
+.lede { margin: 0; color: var(--muted); }
+.tabs { display: flex; gap: 8px; flex-wrap: wrap; }
+.tab { flex: 1 1 0; min-width: 0; border: 2px solid var(--line); background: var(--sheet); color: var(--ink); border-radius: 14px; padding: 10px 12px; font: 700 15px/1.2 var(--body); cursor: pointer; text-align: left; }
+.tab small { display: block; font-weight: 400; color: var(--muted); font-size: 13px; margin-top: 2px; }
+.tab[aria-selected="true"] { border-color: var(--teal); background: var(--teal-soft); }
+.sheet { background: var(--sheet); border: 1px solid var(--line); border-radius: 18px; padding: 18px; display: grid; gap: 14px; }
+.sheet h2 { font: 800 24px/1.1 var(--display); margin: 0; }
+.scene { margin: 0; color: var(--muted); }
+.step { border-top: 1px solid var(--line); padding-top: 14px; display: grid; gap: 10px; }
+.step h3 { margin: 0; font: 700 17px/1.2 var(--body); display: flex; gap: 8px; align-items: center; }
+.num { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: var(--teal); color: #fff; font-size: 14px; flex: none; }
+.hint { margin: 0; color: var(--muted); font-size: 15px; }
+.row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+button.b { border: 0; border-radius: 12px; padding: 10px 14px; font: 700 15px/1 var(--body); cursor: pointer; background: var(--teal); color: #fff; }
+button.b.ghost { background: transparent; color: var(--teal); border: 2px solid var(--teal); }
+button.b:disabled { opacity: .45; cursor: default; }
+.lines { display: grid; gap: 6px; }
+.line { border-radius: 12px; padding: 8px 12px; }
+.line.A { background: var(--asst); } .line.C { background: var(--cust); }
+.who { font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); display: block; }
+.q { display: grid; gap: 4px; }
+.q label { font-weight: 700; }
+input[type=text] { width: 100%; font: 400 17px/1.3 var(--body); padding: 10px 12px; border-radius: 10px; border: 2px solid var(--line); background: var(--paper); color: var(--ink); }
+.fb { font-size: 15px; border-radius: 10px; padding: 6px 10px; }
+.fb.good { background: var(--good-bg); color: var(--good); }
+.fb.mid { background: var(--mid-bg); color: var(--mid); }
+.fb.bad { background: var(--bad-bg); color: var(--bad); }
+.pool, .built { display: grid; gap: 6px; }
+.pool button { text-align: left; border: 2px dashed var(--line); background: var(--paper); color: var(--ink); border-radius: 12px; padding: 8px 12px; font: 400 16px/1.4 var(--body); cursor: pointer; }
+.built .line { display: flex; gap: 8px; }
+.built .n { font-weight: 700; color: var(--muted); min-width: 22px; }
+.built .line.ok { outline: 2px solid var(--good); } .built .line.no { outline: 2px solid var(--bad); }
+.turn { border-radius: 14px; padding: 12px; display: grid; gap: 8px; }
+.turn.A { background: var(--asst); } .turn.C { background: var(--cust); }
+.tr { color: var(--muted); font-size: 15px; font-style: italic; margin: 0; }
+.score { font: 800 20px/1.2 var(--display); }
+.seg { display: inline-flex; border: 2px solid var(--teal); border-radius: 12px; overflow: hidden; }
+.seg button { border: 0; background: transparent; color: var(--teal); padding: 8px 12px; font: 700 14px/1 var(--body); cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--teal); color: #fff; }
+.note { font-size: 14px; color: var(--muted); margin: 0; }
+.hide { display: none !important; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a class="back" href="index.html">← Tüm çalışmalar</a>
+    <span class="eyebrow" lang="en">Quiz 1 · Listening &amp; Speaking</span>
+    <h1>Customer <span>&amp;</span> Assistant</h1>
+    <p class="lede">Üç yeni diyalog: mağaza, sinema gişesi, müze. Her birinde üç adım var: dinle ve cevapla, cümleleri sırala, rolünü sesli oyna. Merve hocanın Unit 2D ve 3D kâğıtlarının benzeri.</p>
+  </header>
+
+  <div class="tabs" role="tablist" id="tabs"></div>
+  <section class="sheet" id="sheet" aria-live="polite"></section>
+  <p class="note" id="voiceNote">Ses tarayıcının kendi İngilizce sesiyle çalışır. Mikrofon düğmesi yalnız Chrome ve Safari'de çıkar; yoksa cümleni yazarak dene.</p>
+</div>
+
+<script>
+// Dialogues: A = Assistant (satıcı), C = Customer (müşteri). tr = Türkçe ipucu for the role-play step.
+const DIALOGUES = [
+  {
+    id: "shop", title: "At a clothes shop", sub: "Mağazada kazak almak",
+    scene: "Bir giyim mağazasındasın. Siyah bir kazak arıyorsun.",
+    lines: [
+      ["A", "Hello, how can I help you?", "Merhaba, nasıl yardımcı olabilirim?"],
+      ["C", "Hi. Have you got any black sweaters?", "Merhaba. Siyah kazağınız var mı?"],
+      ["A", "Yes, we have. The sweaters are over there, next to the jackets.", "Evet, var. Kazaklar şurada, ceketlerin yanında."],
+      ["C", "Thanks. Where are the changing rooms?", "Teşekkürler. Deneme kabinleri nerede?"],
+      ["A", "They're on the second floor.", "İkinci kattalar."],
+      ["C", "How much is this sweater?", "Bu kazak ne kadar?"],
+      ["A", "Let me see. It's thirty-five pounds.", "Bir bakayım. Otuz beş sterlin."],
+      ["C", "OK, I'll have it. Can I pay by card?", "Tamam, alıyorum. Kartla ödeyebilir miyim?"],
+      ["A", "Yes, of course. Would you like a bag?", "Tabii ki. Poşet ister misiniz?"],
+      ["C", "No, thanks.", "Hayır, teşekkürler."],
+      ["A", "Here you are. Have a nice day!", "Buyurun. İyi günler!"]
+    ],
+    qs: [
+      ["What colour sweater does the customer want?", ["black"]],
+      ["Where are the changing rooms?", ["second floor", "on the second floor", "2nd floor"]],
+      ["How much is the sweater?", ["35", "thirty five", "thirty-five"]],
+      ["How does the customer pay?", ["by card", "card", "with a card", "credit card"]]
+    ]
+  },
+  {
+    id: "cinema", title: "At the cinema", sub: "Sinema gişesinde bilet",
+    scene: "Sinema gişesindesin. Arkadaşlarınla yeni bir film için bilet alıyorsun.",
+    lines: [
+      ["A", "Good evening, how can I help you?", "İyi akşamlar, nasıl yardımcı olabilirim?"],
+      ["C", "I'd like three tickets for the new action film, please.", "Yeni aksiyon filmine üç bilet istiyorum, lütfen."],
+      ["A", "Which time would you like?", "Hangi seans olsun?"],
+      ["C", "Six fifteen, please.", "Altıyı çeyrek geçe, lütfen."],
+      ["A", "I'm sorry, the six fifteen film is sold out. There are still some tickets for eight thirty.", "Üzgünüm, 18:15 seansı doldu. 20:30 için hâlâ bilet var."],
+      ["C", "OK, eight thirty is fine.", "Tamam, 20:30 olur."],
+      ["A", "Do you want to sit together?", "Yan yana mı oturmak istersiniz?"],
+      ["C", "Yes, please. Near the front, please.", "Evet, lütfen. Öne yakın olsun, lütfen."],
+      ["A", "No problem. That's twelve pounds each, so three tickets... that's thirty-six pounds.", "Sorun değil. Tanesi on iki sterlin, üç bilet... otuz altı sterlin."],
+      ["C", "Here you are.", "Buyurun."],
+      ["A", "Thank you. Enjoy the film!", "Teşekkürler. İyi seyirler!"]
+    ],
+    qs: [
+      ["How many tickets does the customer want?", ["3", "three", "three tickets"]],
+      ["Which time does the customer get?", ["8:30", "8.30", "eight thirty", "half past eight", "830"]],
+      ["Where do they want to sit?", ["near the front", "front", "at the front"]],
+      ["How much are the three tickets?", ["36", "thirty six", "thirty-six"]]
+    ]
+  },
+  {
+    id: "museum", title: "At the museum", sub: "Müzede bilgi ve bilet",
+    scene: "Bir müzenin danışma masasındasın. Bilgi alıp bilet alıyorsun. Bu sefer konuşmayı sen başlatıyorsun.",
+    lines: [
+      ["C", "Excuse me, what time does the museum close today?", "Affedersiniz, müze bugün saat kaçta kapanıyor?"],
+      ["A", "It closes at six o'clock.", "Saat altıda kapanıyor."],
+      ["C", "How much is a ticket?", "Bilet ne kadar?"],
+      ["A", "It's eight pounds, but it's free for students.", "Sekiz sterlin ama öğrencilere ücretsiz."],
+      ["C", "Great! I'm a student. Here's my ID card.", "Harika! Öğrenciyim. Kimlik kartım burada."],
+      ["A", "Thank you. Here's your ticket.", "Teşekkürler. Biletiniz burada."],
+      ["C", "Is there a café in the museum?", "Müzede kafe var mı?"],
+      ["A", "Yes, there is. It's on the first floor, near the gift shop.", "Evet, var. Birinci katta, hediyelik eşya dükkânının yanında."],
+      ["C", "Can I take photos in there?", "İçeride fotoğraf çekebilir miyim?"],
+      ["A", "Yes, you can, but please don't use a flash.", "Evet, çekebilirsiniz ama lütfen flaş kullanmayın."],
+      ["C", "OK. Thanks very much for your help.", "Tamam. Yardımınız için çok teşekkürler."],
+      ["A", "You're welcome. Enjoy your visit!", "Rica ederim. İyi gezmeler!"]
+    ],
+    qs: [
+      ["What time does the museum close?", ["6", "six", "six o'clock", "6 o'clock", "6:00", "at six"]],
+      ["How much does the customer pay for the ticket?", ["0", "nothing", "free", "it's free", "zero"]],
+      ["Where is the café?", ["first floor", "on the first floor", "1st floor", "near the gift shop"]],
+      ["What can't the customer use?", ["flash", "a flash", "the flash"]]
+    ]
+  }
+];
+
+const $ = (s, el = document) => el.querySelector(s);
+const esc = s => s.replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const norm = s => s.toLowerCase().replace(/[’']/g, "'").replace(/£|pounds?|o'clock tonight/g, " ").replace(/[^a-z0-9:. ']/g, " ").replace(/\s+/g, " ").trim();
+const clean = s => norm(s).replace(/^(it's|it is|they're|they are|at|on|by|with) /, "").replace(/^the /, "");
+const ROLE = { A: "Assistant", C: "Customer" };
+
+// ---------- speech ----------
+let voices = [];
+function loadVoices() {
+  try { voices = speechSynthesis.getVoices().filter(v => /^en/i.test(v.lang)); } catch (e) { voices = []; }
+}
+if ("speechSynthesis" in window) { loadVoices(); speechSynthesis.onvoiceschanged = loadVoices; }
+function pickVoices() {
+  const gb = voices.filter(v => /en-GB/i.test(v.lang));
+  const pool = gb.length >= 2 ? gb : voices;
+  const find = names => pool.find(v => names.some(n => v.name.startsWith(n)));
+  const A = find(["Serena", "Kate", "Martha", "Flo", "Stephanie"]) || pool[0] || null;
+  const C = find(["Daniel", "Arthur", "Oliver", "Reed", "Eddy"]) || pool.find(v => v !== A) || A;
+  return { A, C };
+}
+let slow = false;
+function speak(text, who) {
+  return new Promise(res => {
+    if (!("speechSynthesis" in window)) return res();
+    const u = new SpeechSynthesisUtterance(text.replace(/\.\.\./g, ","));
+    const v = pickVoices()[who];
+    if (v) u.voice = v;
+    u.lang = v ? v.lang : "en-GB";
+    u.rate = slow ? 0.72 : 0.92;
+    u.pitch = who === "A" ? 1.05 : 0.9;
+    u.onend = res; u.onerror = res;
+    speechSynthesis.speak(u);
+  });
+}
+function stopSpeech() { try { speechSynthesis.cancel(); } catch (e) {} }
+const Rec = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+// ---------- state ----------
+let current = 0;
+const store = (() => { try { return window.localStorage; } catch (e) { return null; } })();
+
+function renderTabs() {
+  $("#tabs").innerHTML = DIALOGUES.map((d, i) =>
+    `<button class="tab" role="tab" aria-selected="${i === current}" data-i="${i}">${i + 1}. ${esc(d.title)}<small>${esc(d.sub)}</small></button>`).join("");
+  $("#tabs").querySelectorAll(".tab").forEach(b => b.onclick = () => { stopSpeech(); current = +b.dataset.i; try { store && store.setItem("diyalog-tab", current); } catch (e) {} renderTabs(); renderSheet(); });
+}
+
+function renderSheet() {
+  const d = DIALOGUES[current];
+  const sh = $("#sheet");
+  sh.innerHTML = `
+    <h2>${current + 1}. ${esc(d.title)}</h2>
+    <p class="scene">${esc(d.scene)}</p>
+
+    <div class="step">
+      <h3><span class="num">1</span> Dinle ve cevapla</h3>
+      <p class="hint">Önce metne bakmadan dinle. Kısa cevap yeter (örnek: <i>black</i>, <i>8:30</i>).</p>
+      <div class="row">
+        <button class="b" id="play">▶ Dinle</button>
+        <button class="b ghost" id="stop">■ Durdur</button>
+        <span class="seg" role="group" aria-label="Hız"><button id="normal" aria-pressed="${!slow}">Normal</button><button id="slowb" aria-pressed="${slow}">Yavaş</button></span>
+      </div>
+      ${d.qs.map((q, i) => `<div class="q"><label for="q${i}">${i + 1}. ${esc(q[0])}</label><input type="text" id="q${i}" autocomplete="off" autocapitalize="off" spellcheck="false"><div class="fb hide" id="fb${i}"></div></div>`).join("")}
+      <div class="row"><button class="b" id="checkQ">Kontrol et</button><button class="b ghost" id="showT">Metni göster</button></div>
+      <div class="lines hide" id="transcript">${d.lines.map(l => `<div class="line ${l[0]}"><span class="who" lang="en">${ROLE[l[0]]}</span>${esc(l[1])}</div>`).join("")}</div>
+    </div>
+
+    <div class="step">
+      <h3><span class="num">2</span> Cümleleri sırala</h3>
+      <p class="hint">Diyalog karıştı. Cümlelere doğru sırayla dokun. Her cümlenin önünde kimin söylediği yazıyor.</p>
+      <div class="built" id="built"></div>
+      <div class="pool" id="pool"></div>
+      <div class="row"><button class="b ghost" id="undo">Geri al</button><button class="b" id="checkO" disabled>Kontrol et</button><button class="b ghost" id="resetO">Baştan</button></div>
+      <div class="fb hide" id="fbO"></div>
+    </div>
+
+    <div class="step">
+      <h3><span class="num">3</span> Rolünü sesli oyna</h3>
+      <p class="hint">Karşı taraf konuşur, sen kendi cümleni yüksek sesle söylersin. Türkçe ipucu var; takılırsan "Cevabı göster".</p>
+      <div class="row"><span class="seg" role="group" aria-label="Rol"><button id="asC" aria-pressed="true">Ben müşteriyim</button><button id="asA" aria-pressed="false">Ben satıcıyım</button></span><button class="b" id="startR">Başla</button></div>
+      <div id="rp" class="lines"></div>
+    </div>`;
+
+  // step 1
+  $("#play", sh).onclick = async () => { stopSpeech(); for (const l of d.lines) { await speak(l[1], l[0]); } };
+  $("#stop", sh).onclick = stopSpeech;
+  $("#normal", sh).onclick = () => { slow = false; $("#normal", sh).setAttribute("aria-pressed", "true"); $("#slowb", sh).setAttribute("aria-pressed", "false"); };
+  $("#slowb", sh).onclick = () => { slow = true; $("#slowb", sh).setAttribute("aria-pressed", "true"); $("#normal", sh).setAttribute("aria-pressed", "false"); };
+  $("#showT", sh).onclick = () => { const t = $("#transcript", sh); t.classList.toggle("hide"); $("#showT", sh).textContent = t.classList.contains("hide") ? "Metni göster" : "Metni gizle"; };
+  $("#checkQ", sh).onclick = () => {
+    let ok = 0;
+    d.qs.forEach((q, i) => {
+      const v = clean($("#q" + i, sh).value), fb = $("#fb" + i, sh);
+      const good = v && q[1].some(a => { const n = clean(a); return v === n || v.includes(n) && n.length > 2; });
+      fb.className = "fb " + (good ? "good" : (v ? "bad" : "mid"));
+      fb.textContent = good ? "Doğru." : (v ? "Olmadı. Doğrusu: " + q[1][0] : "Boş. Doğrusu: " + q[1][0]);
+      if (good) ok++;
+    });
+    const fb = $("#fb" + (d.qs.length - 1), sh);
+    fb.textContent += `  ·  Toplam ${ok}/${d.qs.length}`;
+  };
+
+  // step 2
+  const order = d.lines.map((_, i) => i);
+  let pool = shuffle(order.slice()), built = [];
+  function drawOrder() {
+    $("#built", sh).innerHTML = built.map((i, k) => `<div class="line ${d.lines[i][0]}" data-k="${k}"><span class="n">${k + 1}.</span><span><span class="who" lang="en">${ROLE[d.lines[i][0]]}</span>${esc(d.lines[i][1])}</span></div>`).join("");
+    $("#pool", sh).innerHTML = pool.map(i => `<button data-i="${i}"><span class="who" lang="en">${ROLE[d.lines[i][0]]}</span>${esc(d.lines[i][1])}</button>`).join("");
+    $("#pool", sh).querySelectorAll("button").forEach(b => b.onclick = () => { const i = +b.dataset.i; pool = pool.filter(x => x !== i); built.push(i); drawOrder(); });
+    $("#checkO", sh).disabled = pool.length > 0;
+    $("#fbO", sh).classList.add("hide");
+  }
+  drawOrder();
+  $("#undo", sh).onclick = () => { if (built.length) { pool.push(built.pop()); drawOrder(); } };
+  $("#resetO", sh).onclick = () => { pool = shuffle(order.slice()); built = []; drawOrder(); };
+  $("#checkO", sh).onclick = () => {
+    let ok = 0;
+    $("#built", sh).querySelectorAll(".line").forEach((el, k) => { const good = built[k] === k || d.lines[built[k]][1] === d.lines[k][1]; el.classList.add(good ? "ok" : "no"); if (good) ok++; });
+    const fb = $("#fbO", sh);
+    fb.className = "fb " + (ok === d.lines.length ? "good" : ok >= d.lines.length - 3 ? "mid" : "bad");
+    fb.textContent = ok === d.lines.length ? `Hepsi doğru: ${ok}/${d.lines.length}.` : `${ok}/${d.lines.length} doğru yerde. Kırmızılar yanlış sırada; "Geri al" ile düzelt ya da 1. adımda metni aç.`;
+  };
+
+  // step 3
+  let me = "C";
+  $("#asC", sh).onclick = () => { me = "C"; $("#asC", sh).setAttribute("aria-pressed", "true"); $("#asA", sh).setAttribute("aria-pressed", "false"); };
+  $("#asA", sh).onclick = () => { me = "A"; $("#asA", sh).setAttribute("aria-pressed", "true"); $("#asC", sh).setAttribute("aria-pressed", "false"); };
+  $("#startR", sh).onclick = () => { stopSpeech(); $("#rp", sh).innerHTML = ""; roleplay(d, me, 0, { ok: 0, mine: 0 }); };
+}
+
+function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } if (a.every((v, i) => v === i) && a.length > 1) [a[0], a[1]] = [a[1], a[0]]; return a; }
+
+function similarity(said, target) {
+  const w = s => norm(s).split(" ").filter(x => x.length > 1);
+  const t = w(target), s = new Set(w(said));
+  if (!t.length) return 1;
+  return t.filter(x => s.has(x)).length / t.length;
+}
+
+async function roleplay(d, me, i, tally) {
+  const box = $("#rp");
+  if (i >= d.lines.length) {
+    const el = document.createElement("div");
+    el.className = "fb " + (tally.ok === tally.mine ? "good" : tally.ok >= tally.mine - 1 ? "mid" : "bad");
+    el.innerHTML = `<span class="score">Bitti: ${tally.ok}/${tally.mine}</span> cümlen yeterince doğruydu. Bir de diğer rolü dene.`;
+    box.appendChild(el); return;
+  }
+  const [who, en, tr] = d.lines[i];
+  const turn = document.createElement("div");
+  turn.className = "turn " + who;
+  box.appendChild(turn);
+  if (who !== me) {
+    turn.innerHTML = `<span class="who" lang="en">${ROLE[who]}</span><div>${esc(en)}</div>`;
+    await speak(en, who);
+    return roleplay(d, me, i + 1, tally);
+  }
+  tally.mine++;
+  turn.innerHTML = `<span class="who" lang="en">${ROLE[who]} · sıra sende</span>
+    <p class="tr">İpucu: ${esc(tr)}</p>
+    <input type="text" placeholder="Sesli söyle ya da yaz" autocomplete="off" autocapitalize="off" spellcheck="false">
+    <div class="row">
+      ${Rec ? '<button class="b mic">🎤 Konuş</button>' : ""}
+      <button class="b ok">Tamam</button>
+      <button class="b ghost show">Cevabı göster</button>
+    </div>
+    <div class="fb hide"></div>`;
+  turn.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  const inp = $("input", turn), fb = $(".fb", turn);
+  const finish = async (shown) => {
+    const sc = shown ? 0 : similarity(inp.value, en);
+    const good = sc >= 0.7;
+    if (good) tally.ok++;
+    fb.className = "fb " + (shown ? "mid" : good ? "good" : sc >= 0.4 ? "mid" : "bad");
+    fb.innerHTML = (shown ? "Doğrusu" : good ? "Güzel. Kitaptaki hali" : "Yakınsın. Kitaptaki hali") + `: <b>${esc(en)}</b>`;
+    turn.querySelectorAll("button").forEach(b => b.disabled = true);
+    inp.disabled = true;
+    await speak(en, who);
+    roleplay(d, me, i + 1, tally);
+  };
+  $(".ok", turn).onclick = () => finish(false);
+  inp.addEventListener("keydown", e => { if (e.key === "Enter") finish(false); });
+  $(".show", turn).onclick = () => finish(true);
+  const mic = $(".mic", turn);
+  if (mic) mic.onclick = () => {
+    try {
+      const r = new Rec(); r.lang = "en-GB"; r.interimResults = false; r.maxAlternatives = 1;
+      mic.textContent = "Dinliyorum…"; mic.disabled = true;
+      r.onresult = e => { inp.value = e.results[0][0].transcript; };
+      r.onend = () => { mic.textContent = "🎤 Tekrar"; mic.disabled = false; if (inp.value) finish(false); };
+      r.onerror = () => { mic.textContent = "🎤 Olmadı, yaz"; mic.disabled = false; };
+      r.start();
+    } catch (e) { mic.textContent = "Mikrofon yok, yaz"; }
+  };
+  inp.focus();
+}
+
+try { const t = store && +store.getItem("diyalog-tab"); if (t >= 0 && t < DIALOGUES.length) current = t; } catch (e) {}
+if (!("speechSynthesis" in window)) $("#voiceNote").textContent = "Bu tarayıcı sesli okumayı desteklemiyor. Chrome ya da Safari ile aç.";
+renderTabs();
+renderSheet();
+</script>
+</body>
+</html>
