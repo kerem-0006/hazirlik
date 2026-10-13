@@ -111,7 +111,7 @@ footer { font-size: 13px; color: var(--muted); }
 <div class="wrap">
   <header>
     <a class="back" href="index.html">← Çalışma sayfaları</a>
-    <span class="eyebrow">Elementary · Reading</span>
+    <span class="eyebrow" lang="en">Elementary · Reading</span>
     <h1>Reading <span>Çalışması</span> 1</h1>
     <div class="meta">
       <span class="chip"><b>10</b> soru</span>
@@ -144,7 +144,7 @@ footer { font-size: 13px; color: var(--muted); }
 
   <div class="bar">
     <div class="bar-in">
-      <div class="score" id="score" aria-live="polite">— <small>/ 10</small></div>
+      <div class="score" id="score" aria-live="polite">? <small>/ 10</small></div>
       <div class="btns">
         <button class="btn primary" type="button" id="check">Kontrol et</button>
         <button class="btn ghost" type="button" id="show">Cevapları göster</button>
@@ -156,6 +156,7 @@ footer { font-size: 13px; color: var(--muted); }
   <footer>Metin ve sorular bu çalışma için yazıldı. Okulun sınavlarından ya da ders kitabından alınmadı. Metindeki kişiler hayalidir.</footer>
 </div>
 
+<script src="mars.js"></script>
 <script>
 (function () {
   var Q = [
@@ -214,7 +215,7 @@ footer { font-size: 13px; color: var(--muted); }
   var score = document.getElementById('score');
 
   function mark(reveal) {
-    var right = 0;
+    var right = 0, miss = [];
     cards.forEach(function (c, i) {
       var q = Q[i];
       var labs = c.querySelectorAll('.opt');
@@ -222,7 +223,7 @@ footer { font-size: 13px; color: var(--muted); }
       var fb = c.querySelector('.fb');
       labs.forEach(function (l) { l.classList.remove('right', 'wrong'); });
       var p = picked ? +picked.value : -1;
-      if (p === q.a) right++;
+      if (p === q.a) right++; else miss.push((i + 1) + '. soru (' + q.type + ')');
       if (p === -1 && !reveal) {
         fb.hidden = false;
         fb.innerHTML = '<span class="res no">Boş bıraktın.</span>';
@@ -236,6 +237,16 @@ footer { font-size: 13px; color: var(--muted); }
       fb.lastChild.textContent = q.why;
     });
     score.innerHTML = right + ' <small>/ 10</small>';
+    if (!reveal) marsKutu(right, miss);
+  }
+  var mk = null, son = { d: 0, m: [] };
+  function marsKutu(d, m) {
+    son = { d: d, m: m };
+    if (mk) { mk.querySelector('.mars-durum').textContent = ''; mk.querySelector('button').disabled = false; mk.querySelector('button').textContent = 'MARS\'a gönder'; return; }
+    var k = document.createElement('div'); k.className = 'mars-son';
+    box.appendChild(k);
+    mk = MARS.tuslar(k, function () { return { tur: 'reading', ad: 'Reading 1 · The Night Bus', dogru: son.d, toplam: 10, kacan: son.m }; },
+      function () { return 'Reading 1 · The Night Bus: ' + son.d + '/10' + (son.m.length ? '. Kaçanlar: ' + son.m.join(', ') : ''); });
   }
 
   document.getElementById('check').addEventListener('click', function () { mark(false); });
@@ -246,7 +257,7 @@ footer { font-size: 13px; color: var(--muted); }
       c.querySelectorAll('.opt').forEach(function (l) { l.classList.remove('right', 'wrong'); });
       var fb = c.querySelector('.fb'); fb.hidden = true; fb.innerHTML = '';
     });
-    score.innerHTML = '— <small>/ 10</small>';
+    score.innerHTML = '? <small>/ 10</small>';
     window.scrollTo(0, 0);
   });
 })();

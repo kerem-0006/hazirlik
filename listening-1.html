@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Listening 1 · At the Hotel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&display=swap">
+<style>
+/* Layout: an exam paper. Wide screens: the passage stays pinned on the left like a printed text sheet, questions scroll on the right. Phones: passage first, questions below. Answers stay hidden until "Kontrol et". */
+:root {
+  --bg: #eef6f5;
+  --sheet: #ffffff;
+  --paper: #fbfaf6;
+  --ink: #16302e;
+  --muted: #5a716f;
+  --teal: #0e8f86;
+  --teal-soft: #d5eeeb;
+  --ans: #c2185b;
+  --ans-bg: #fde6ef;
+  --line: #cfe1df;
+  --good: #1f7a3a;
+  --good-bg: #dff3e4;
+  --bad: #b3261e;
+  --bad-bg: #fbe3e1;
+  --display: "Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
+  --body: "Atkinson Hyperlegible", "Helvetica Neue", Arial, sans-serif;
+  --text: "Literata", Georgia, "Times New Roman", serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0d1a19; --sheet: #142624; --paper: #18292a; --ink: #e3efed; --muted: #93aaa7;
+    --teal: #3cc2b6; --teal-soft: #1b3835; --ans: #ff7eb0; --ans-bg: #3a1a28;
+    --line: #24403d; --good: #7fd69a; --good-bg: #173523; --bad: #ff8a80; --bad-bg: #3d1a17;
+    color-scheme: dark;
+  }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 17px; line-height: 1.55; }
+.wrap { max-width: 1180px; margin: 0 auto; padding-inline: 16px; padding-block: 28px 56px; display: grid; gap: 22px; }
+
+header { display: grid; gap: 10px; }
+.back { font-size: 14px; color: var(--teal); text-decoration: none; font-weight: 700; }
+.eyebrow { font: 700 12px/1 var(--body); letter-spacing: .12em; text-transform: uppercase; color: var(--teal); }
+h1 { font: 800 clamp(34px, 7vw, 54px)/1.02 var(--display); margin: 0; text-wrap: balance; letter-spacing: -.01em; }
+h1 span { color: var(--teal); }
+.meta { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { background: var(--sheet); border: 1px solid var(--line); border-radius: 999px; padding: 5px 12px; font-size: 14px; }
+.chip b { color: var(--teal); }
+.howto { margin: 0; color: var(--muted); max-width: 70ch; font-size: 15px; }
+
+.grid { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 22px; align-items: start; }
+
+.passage { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 12px); max-height: calc(100vh - 24px); overflow: auto; background: var(--paper); border: 1px solid var(--line); border-radius: 14px; padding: 22px 24px; }
+.passage h2 { font: 600 28px/1.15 var(--text); margin: 0 0 4px; }
+.passage .sub { font-size: 13px; color: var(--muted); margin: 0 0 14px; }
+.para { display: grid; grid-template-columns: 1.8em 1fr; gap: 6px; margin: 0 0 12px; font-family: var(--text); font-size: 17px; line-height: 1.7; }
+.para .pn { font: 800 14px/1.9 var(--display); color: var(--teal); }
+.para p { margin: 0; }
+.ref { border-bottom: 2px solid var(--teal); font-weight: 600; }
+.voc { border-bottom: 2px dotted var(--ans); font-weight: 600; }
+.tag { font: 700 10px/1 var(--body); vertical-align: super; color: var(--sheet); background: var(--teal); border-radius: 4px; padding: 2px 4px; margin-left: 2px; }
+.voc + .tag { background: var(--ans); }
+
+.qs { display: grid; gap: 14px; }
+.q { background: var(--sheet); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; display: grid; gap: 10px; }
+.q-head { display: flex; gap: 10px; align-items: baseline; }
+.q-num { font: 800 26px/1 var(--display); color: var(--teal); min-width: 1.3em; }
+.q-type { font: 700 11px/1 var(--body); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); border: 1px solid var(--line); border-radius: 6px; padding: 4px 7px; white-space: nowrap; }
+.q-text { margin: 0; font-weight: 700; }
+.q-text em { font-family: var(--text); font-weight: 600; }
+.opts { display: grid; gap: 6px; }
+.opt { display: grid; grid-template-columns: 1.9em 1fr; gap: 8px; align-items: start; border: 2px solid var(--line); border-radius: 10px; padding: 8px 10px; cursor: pointer; background: var(--sheet); }
+.opt:hover { border-color: var(--teal); }
+.opt input { position: absolute; opacity: 0; pointer-events: none; }
+.opt .l { font: 800 14px/1.6 var(--display); color: var(--teal); text-transform: uppercase; }
+.opt:has(input:checked) { border-color: var(--teal); background: var(--teal-soft); }
+.opt:has(input:focus-visible) { outline: 3px solid var(--ans); outline-offset: 2px; }
+.opt.right { border-color: var(--good); background: var(--good-bg); }
+.opt.wrong { border-color: var(--bad); background: var(--bad-bg); }
+.opt.right .l, .opt.wrong .l { color: inherit; }
+.fb { font-size: 15px; border-left: 3px solid var(--ans); padding-left: 12px; display: grid; gap: 4px; }
+.fb .res { font-weight: 700; }
+.fb .res.ok { color: var(--good); }
+.fb .res.no { color: var(--bad); }
+
+.bar { position: sticky; bottom: 0; padding-bottom: env(safe-area-inset-bottom, 0px); }
+.bar-in { background: var(--sheet); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; box-shadow: 0 6px 24px rgba(0,0,0,.08); }
+.score { font: 800 20px/1 var(--display); font-variant-numeric: tabular-nums; }
+.score small { font: 400 14px var(--body); color: var(--muted); }
+.btns { display: flex; flex-wrap: wrap; gap: 8px; }
+.btn { font: 700 15px var(--body); border-radius: 999px; padding: 9px 18px; cursor: pointer; border: 2px solid var(--teal); }
+.btn.primary { background: var(--teal); color: var(--sheet); }
+.btn.ghost { background: transparent; color: var(--teal); }
+.btn:focus-visible { outline: 3px solid var(--ans); outline-offset: 2px; }
+footer { font-size: 13px; color: var(--muted); }
+
+@media (max-width: 860px) {
+  .grid { grid-template-columns: 1fr; }
+  .passage { position: static; max-height: none; }
+}
+@media (max-width: 520px) {
+  body { font-size: 16px; }
+  .passage { padding: 18px 16px; }
+  .para { font-size: 16px; }
+}
+
+.player { display: grid; gap: 12px; margin-top: 6px; }
+.player audio { width: 100%; }
+.speed { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.speed .lbl { font: 700 12px/1 var(--body); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.pill { font: 700 14px var(--body); border: 2px solid var(--line); background: var(--sheet, #fff); color: var(--ink); border-radius: 999px; padding: 6px 12px; cursor: pointer; }
+.pill[aria-pressed="true"] { border-color: var(--teal); background: var(--teal-soft); color: var(--teal); }
+.plays { font-size: 14px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.plays b { color: var(--ink); }
+.tips { margin: 4px 0 0; padding-left: 1.1em; font-size: 15px; color: var(--muted); display: grid; gap: 4px; }
+.tips b { color: var(--ink); }
+.script { margin-top: 6px; border-top: 1px solid var(--line); padding-top: 12px; }
+.script summary { cursor: pointer; font-weight: 700; color: var(--teal); }
+.script[data-locked="1"] summary { color: var(--muted); cursor: not-allowed; }
+.script ol { margin: 10px 0 0; padding-left: 0; list-style: none; display: grid; gap: 6px; font-family: var(--text); font-size: 16px; }
+.script li b { font-family: var(--body); font-size: 12px; letter-spacing: .06em; color: var(--teal); margin-right: 6px; }
+.part { font: 800 20px/1.1 var(--display); margin: 8px 0 -4px; }
+.part small { display: block; font: 400 14px/1.4 var(--body); color: var(--muted); margin-top: 4px; }
+</style>
+<script src="mars.js"></script>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a class="back" href="index.html">← Çalışma sayfaları</a>
+    <span class="eyebrow"><span lang="en">Elementary · Listening · Quiz 1</span> hazırlığı</span>
+    <h1>Listening <span>1</span> · At the Hotel</h1>
+    <div class="meta">
+      <span class="chip"><b>8</b> soru</span>
+      <span class="chip"><b>4</b> True / False · <b>4</b> seçmeli</span>
+      <span class="chip">Ünite 1-4</span>
+    </div>
+    <p class="howto">Önce soruları oku ve ne duyacağını tahmin et. Sonra kaydı iki kez dinle, durdurmadan. Cevapla, en altta "Kontrol et"e bas. Konuşmanın metni kontrolden sonra açılır.</p>
+  </header>
+
+  <div class="grid">
+    <article class="passage" aria-label="Dinleme kaydı">
+      <h2>Otelde giriş</h2>
+      <div class="player">
+        <audio id="ses" controls preload="metadata" src="listening-1.mp3"></audio>
+        <div class="speed"><span class="lbl">Hız</span>
+          <button class="pill" type="button" data-src="listening-1.mp3" aria-pressed="true">Normal</button>
+          <button class="pill" type="button" data-src="listening-1-yavas.mp3" aria-pressed="false">Yavaş</button>
+          <span class="plays">Dinleme: <b id="plays">0</b> / 2</span>
+        </div>
+      </div>
+      <ul class="tips">
+        <li><b>but</b> kelimesinden sonra gelen bilgi çoğu zaman asıl cevaptır.</li>
+        <li>Biri yanlış söyleyip düzeltebilir: <b>Actually...</b>, <b>No, ...</b></li>
+        <li><b>-teen</b> sayıların sonunda n sesi var (fifteen), <b>-ty</b> sayılarda yok (fifty).</li>
+      </ul>
+      <details class="script" id="script" data-locked="1">
+        <summary>Konuşmanın metni (önce Kontrol et)</summary>
+        <ol><li><b>A</b>Good evening. Welcome to the Park Hotel. How can I help you?</li><li><b>B</b>Hi. I&#x27;ve got a reservation. My name&#x27;s Mark Dalton.</li><li><b>A</b>Can you spell your surname, please?</li><li><b>B</b>Sure. D, A, L, T, O, N.</li><li><b>A</b>Thank you, Mr Dalton. Yes, a single room for three nights.</li><li><b>B</b>Actually, it&#x27;s four nights. I leave on Saturday.</li><li><b>A</b>Oh, sorry. Yes, four nights, until Saturday. Your room is on the second floor. Room two one five.</li><li><b>B</b>Two one five. Is there a lift?</li><li><b>A</b>Yes, there is. It&#x27;s next to the café.</li><li><b>B</b>Great. What time is breakfast?</li><li><b>A</b>It&#x27;s from seven o&#x27;clock to ten o&#x27;clock, but on Sunday it&#x27;s until eleven.</li><li><b>B</b>And is there wifi in the room?</li><li><b>A</b>Yes. The password is PARK, and then the number fifteen. One, five.</li><li><b>B</b>PARK fifteen. Thanks. Oh, and can I pay by card?</li><li><b>A</b>Of course. Here&#x27;s your key. Have a nice stay!</li></ol>
+      </details>
+    </article>
+
+    <section class="qs" id="qs" aria-label="Sorular"></section>
+  </div>
+
+  <div class="bar">
+    <div class="bar-in">
+      <div class="score" id="score" aria-live="polite">? <small>/ 8</small></div>
+      <div class="btns">
+        <button class="btn primary" type="button" id="check">Kontrol et</button>
+        <button class="btn ghost" type="button" id="show">Cevapları göster</button>
+        <button class="btn ghost" type="button" id="reset">Baştan başla</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>Konuşma ve sorular bu çalışma için yazıldı, okulun sınavından ya da ders kitabından alınmadı. Kişiler hayalidir. Sesler bilgisayarda yapay zekâ ile üretildi.</footer>
+</div>
+<script>
+(function () {
+  var Q = [{"type": "True / False", "text": "The guest's surname is Dalton.", "opts": ["True", "False"], "L": ["T", "F"], "a": 0, "why": "Harf harf söyledi: D, A, L, T, O, N."}, {"type": "True / False", "text": "He is at the hotel for three nights.", "opts": ["True", "False"], "L": ["T", "F"], "a": 1, "why": "Tuzak: resepsiyon \"three nights\" dedi, adam düzeltti: \"Actually, it's four nights.\""}, {"type": "True / False", "text": "The lift is next to the restaurant.", "opts": ["True", "False"], "L": ["T", "F"], "a": 1, "why": "\"It's next to the café.\" Restoran geçmiyor."}, {"type": "True / False", "text": "On Sunday, breakfast finishes at eleven.", "opts": ["True", "False"], "L": ["T", "F"], "a": 0, "why": "\"but on Sunday it's until eleven\": but'tan sonrası Pazar günü."}, {"type": "Seçmeli", "text": "What is his room number?", "opts": ["250", "215", "205"], "L": ["a", "b", "c"], "a": 1, "why": "\"Room two one five\" = 215."}, {"type": "Seçmeli", "text": "When does he leave?", "opts": ["on Friday", "on Sunday", "on Saturday"], "L": ["a", "b", "c"], "a": 2, "why": "\"I leave on Saturday.\""}, {"type": "Seçmeli", "text": "What is the wifi password?", "opts": ["PARK50", "PARK15", "PARK51"], "L": ["a", "b", "c"], "a": 1, "why": "\"fifteen. One, five.\" Sonda n sesi var: teen = 15."}, {"type": "Seçmeli", "text": "How does he pay?", "opts": ["by card", "in cash", "We don't know."], "L": ["a", "b", "c"], "a": 0, "why": "\"Can I pay by card?\" \"Of course.\""}];
+  var AD = "Listening 1 · At the Hotel", N = Q.length;
+  var box = document.getElementById('qs'), score = document.getElementById('score'), ses = document.getElementById('ses');
+  var plays = 0, sayac = document.getElementById('plays');
+  ses.addEventListener('play', function () { if (ses.currentTime < 0.5) { plays++; sayac.textContent = plays; } });
+  document.querySelectorAll('.speed .pill').forEach(function (b) {
+    b.addEventListener('click', function () {
+      document.querySelectorAll('.speed .pill').forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+      ses.src = b.getAttribute('data-src'); ses.load();
+    });
+  });
+  var scr = document.getElementById('script');
+  scr.addEventListener('toggle', function () { if (scr.open && scr.getAttribute('data-locked') === '1') scr.open = false; });
+
+  function baslik(t, alt) { var h = document.createElement('h3'); h.className = 'part'; h.innerHTML = t + '<small>' + alt + '</small>'; box.appendChild(h); }
+  Q.forEach(function (q, i) {
+    if (i === 0) baslik('Part 1 · True or False?', 'Cümle kayıtla aynıysa True, değilse False.');
+    if (q.type === 'Seçmeli' && Q[i - 1].type !== 'Seçmeli') baslik('Part 2 · Choose a, b or c', 'Doğru şıkkı seç.');
+    var el = document.createElement('div');
+    el.className = 'q';
+    el.innerHTML = '<div class="q-head"><span class="q-num">' + (i + 1) + '</span><p class="q-text"></p></div><div class="opts" role="radiogroup"></div><div class="fb" hidden></div>';
+    el.querySelector('.q-text').textContent = q.text + ' ';
+    var tp = document.createElement('span'); tp.className = 'q-type'; tp.textContent = q.type; el.querySelector('.q-text').appendChild(tp);
+    var opts = el.querySelector('.opts');
+    opts.setAttribute('aria-label', 'Soru ' + (i + 1));
+    q.opts.forEach(function (o, j) {
+      var lab = document.createElement('label');
+      lab.className = 'opt';
+      lab.innerHTML = '<input type="radio" name="q' + i + '" value="' + j + '"><span class="l">' + q.L[j] + '</span><span class="t"></span>';
+      lab.querySelector('.t').textContent = o;
+      opts.appendChild(lab);
+    });
+    box.appendChild(el);
+  });
+  var cards = Array.prototype.slice.call(box.querySelectorAll('.q'));
+
+  var mk = null, son = { d: 0, m: [] };
+  function marsKutu(d, m) {
+    son = { d: d, m: m };
+    if (mk) { mk.querySelector('.mars-durum').textContent = ''; var b = mk.querySelector('button'); b.disabled = false; b.textContent = 'MARS\'a gönder'; return; }
+    var k = document.createElement('div'); box.appendChild(k);
+    mk = MARS.tuslar(k, function () { return { tur: 'listening', ad: AD, dogru: son.d, toplam: N, kacan: son.m }; },
+      function () { return AD + ': ' + son.d + '/' + N + ' (dinleme ' + plays + ' kez)' + (son.m.length ? '. Kaçanlar: ' + son.m.join(', ') : ''); });
+  }
+
+  function mark(reveal) {
+    var right = 0, miss = [];
+    cards.forEach(function (c, i) {
+      var q = Q[i], labs = c.querySelectorAll('.opt'), picked = c.querySelector('input:checked'), fb = c.querySelector('.fb');
+      labs.forEach(function (l) { l.classList.remove('right', 'wrong'); });
+      var p = picked ? +picked.value : -1;
+      if (p === q.a) right++; else miss.push((i + 1) + '. ' + q.text);
+      if (p === -1 && !reveal) { fb.hidden = false; fb.innerHTML = '<span class="res no">Boş bıraktın.</span>'; return; }
+      labs[q.a].classList.add('right');
+      if (p !== -1 && p !== q.a) labs[p].classList.add('wrong');
+      fb.hidden = false;
+      fb.innerHTML = (p === q.a ? '<span class="res ok">Doğru.</span>' : '<span class="res' + (p === -1 ? '' : ' no') + '">Doğru cevap: ' + q.L[q.a] + ' (' + q.opts[q.a] + ')</span>') + '<span></span>';
+      fb.lastChild.textContent = q.why;
+    });
+    score.innerHTML = right + ' <small>/ ' + N + '</small>';
+    scr.setAttribute('data-locked', '0'); scr.querySelector('summary').textContent = 'Konuşmanın metni';
+    if (!reveal) marsKutu(right, miss);
+  }
+  document.getElementById('check').addEventListener('click', function () { mark(false); });
+  document.getElementById('show').addEventListener('click', function () { mark(true); });
+  document.getElementById('reset').addEventListener('click', function () {
+    cards.forEach(function (c) {
+      c.querySelectorAll('input').forEach(function (inp) { inp.checked = false; });
+      c.querySelectorAll('.opt').forEach(function (l) { l.classList.remove('right', 'wrong'); });
+      var fb = c.querySelector('.fb'); fb.hidden = true; fb.innerHTML = '';
+    });
+    score.innerHTML = '? <small>/ ' + N + '</small>';
+    scr.open = false; scr.setAttribute('data-locked', '1'); scr.querySelector('summary').textContent = 'Konuşmanın metni (önce Kontrol et)';
+    plays = 0; sayac.textContent = '0';
+    window.scrollTo(0, 0);
+  });
+})();
+</script>
+</body>
+</html>

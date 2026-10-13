@@ -305,6 +305,7 @@ td b { color: var(--ans); }
   <footer>Kurallar Roadmap A2 Ünite 1 gramer kutularından (s.6, s.9, s.10) ve okulun Subject & Object Pronouns çalışma kâğıdından özetlendi. Sorular ve örnek cümleler bu çalışma için yazıldı; kişiler hayalidir.</footer>
 </div>
 
+<script src="mars.js"></script>
 <script>
 (function () {
   // konu: [soru tipi, görev (___ boşluk), kabul edilen cevaplar (| ile), İpucu 1 kural, İpucu 2 örnek, açıklama]
@@ -485,14 +486,14 @@ td b { color: var(--ans); }
       '<p class="note">Puan (ipucusuz + ipuçlunun yarısı) / çözülen: %' + pct + '</p><h3>Konu konu</h3><ul class="miss">' + by + '</ul>';
     if (missed.length) html += '<h3>Tekrar bakılacaklar</h3><ul class="miss">' + missed.map(function (x) { return '<li><b>' + esc(x.c.task) + '</b><span>' + esc(x.c.ok[0]) + '</span></li>'; }).join('') + '</ul>';
     html += '<div class="btns">' + (missed.length ? '<button class="btn primary" type="button" id="again">Kaçanları tekrar çöz</button>' : '') +
-      '<button class="btn" type="button" id="copy">Sonucu kopyala</button><button class="btn quiet" type="button" id="restart">Baştan başla</button></div><p class="note" id="copied"></p>';
+      '<button class="btn quiet" type="button" id="restart">Baştan başla</button></div>';
     var r = $('result'); r.innerHTML = html; r.hidden = false; r.scrollIntoView({ behavior: 'smooth', block: 'start' });
     if (missed.length) $('again').addEventListener('click', function () { start(missed.map(function (x) { return x.c; })); });
     $('restart').addEventListener('click', function () { r.hidden = true; $('progress').hidden = true; $('quiz').scrollIntoView({ behavior: 'smooth' }); });
-    $('copy').addEventListener('click', function () {
-      var txt = 'Ünite 1 gramer: ' + n + ' soru, ' + t.g + ' ipucusuz, ' + t.m + ' ipucuyla, ' + t.b + ' bilemedim (%' + pct + ').' + (missed.length ? ' Kaçanlar: ' + missed.map(function (x) { return x.c.task; }).join(' / ') : '');
-      var ok = function () { $('copied').textContent = 'Kopyalandı. MARS\'a yapıştırabilirsin.'; };
-      try { navigator.clipboard.writeText(txt).then(ok, function () { $('copied').textContent = txt; }); } catch (e) { $('copied').textContent = txt; }
+    MARS.tuslar(r, function () {
+      return { tur: 'gramer', ad: 'Ünite 1 gramer', parca: [{ unite: 'Unit 1', sorulan: n, dogru: t.g, yarim: t.m }], kacan: missed.map(function (x) { return x.c.task; }) };
+    }, function () {
+      return 'Ünite 1 gramer: ' + n + ' soru, ' + t.g + ' ipucusuz, ' + t.m + ' ipucuyla, ' + t.b + ' bilemedim (%' + pct + ').' + (missed.length ? ' Kaçanlar: ' + missed.map(function (x) { return x.c.task; }).join(' / ') : '');
     });
   }
 })();

@@ -195,6 +195,7 @@ footer { font-size: 13px; color: var(--muted); }
   <footer>Kelimeler hocanın Track 1 kelime listesinden (Roadmap A2, Ünite 1-5). Örnek cümleler ve resimler bu çalışma için hazırlandı; cümlelerdeki kişiler hayalidir. Ünite 4 ve 5 derste 12 Ekim'de başlıyor.</footer>
 </div>
 
+<script src="mars.js"></script>
 <script>
 (function () {
   // [english, türkçe (| ile alternatifler, ilki gösterilir), örnek cümle (*kelime*), resim, resim notu (isteğe bağlı, İngilizce)]
@@ -723,18 +724,18 @@ footer { font-size: 13px; color: var(--muted); }
       html += '<h3>Deftere yazılacaklar</h3><ul class="miss">' + missed.map(function (x) { return '<li><b>' + esc(x.c.en) + '</b><span>' + esc(x.c.tr[0]) + '</span></li>'; }).join('') + '</ul>';
     }
     html += '<div class="btns">' + (missed.length ? '<button class="btn primary" type="button" id="again">Kaçanları tekrar çalış</button>' : '') +
-      '<button class="btn" type="button" id="copy">Sonucu kopyala</button><button class="btn quiet" type="button" id="restart">Baştan başla</button></div><p class="note" id="copied"></p>';
+      '<button class="btn quiet" type="button" id="restart">Baştan başla</button></div>';
     var r = $('result');
     r.innerHTML = html; r.hidden = false;
     r.scrollIntoView({ behavior: 'smooth', block: 'start' });
     if (missed.length) $('again').addEventListener('click', function () { start(missed.map(function (x) { return x.c; })); });
     $('restart').addEventListener('click', function () { r.hidden = true; $('progress').hidden = true; window.scrollTo(0, 0); });
-    $('copy').addEventListener('click', function () {
-      var txt = 'Kelime kartları: ' + n + ' kelime, ' + t.g + ' ipucusuz, ' + t.m + ' ipucuyla, ' + t.b + ' bilemedim (%' + pct + ').' +
-        (missed.length ? ' Kaçanlar: ' + missed.map(function (x) { return x.c.en + (x.r === 'm' ? ' (ipucuyla)' : ''); }).join(', ') + '.' : '');
-      var ok = function () { $('copied').textContent = 'Kopyalandı. MARS\'a yapıştırabilirsin.'; };
-      try { navigator.clipboard.writeText(txt).then(ok, function () { fallback(txt); }); } catch (e) { fallback(txt); }
-      function fallback(s) { var ta = document.createElement('textarea'); ta.value = s; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); ok(); } catch (e2) { $('copied').textContent = s; } ta.remove(); }
+    MARS.tuslar(r, function () {
+      var pu = {};
+      results.forEach(function (x) { var k = 'Unit ' + x.c.u; pu[k] = pu[k] || { unite: k, sorulan: 0, dogru: 0, yarim: 0 }; pu[k].sorulan++; if (x.r === 'g') pu[k].dogru++; else if (x.r === 'm') pu[k].yarim++; });
+      return { tur: 'kelime', ad: 'Kelime kartları', parca: Object.keys(pu).sort().map(function (k) { return pu[k]; }), kacan: missed.map(function (x) { return x.c.en + (x.r === 'm' ? ' (ipucuyla)' : ''); }) };
+    }, function () {
+      return 'Kelime kartları: ' + n + ' kelime, ' + t.g + ' ipucusuz, ' + t.m + ' ipucuyla, ' + t.b + ' bilemedim (%' + pct + ').' + (missed.length ? ' Kaçanlar: ' + missed.map(function (x) { return x.c.en + (x.r === 'm' ? ' (ipucuyla)' : ''); }).join(', ') + '.' : '');
     });
   }
 })();
