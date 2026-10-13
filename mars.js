@@ -23,20 +23,20 @@
     if (tus) tus.disabled = true;
     yaz(durum, 'Gönderiliyor...');
     var bitti = false;
-    var zaman = setTimeout(function () { if (!bitti) { bitti = true; yedek(); } }, 4000);
-    function yedek() {
+    var zaman = setTimeout(function () { if (!bitti) { bitti = true; yedek(true); } }, 8000);
+    function yedek(bekliyor) {
       if (tus) tus.disabled = false;
       kopyala('MARS SONUÇ · ' + metin,
-        function () { yaz(durum, 'MARS paneline ulaşılamadı (panel kapalı ya da telefondasın). Sonuç kopyalandı, MARS\'a yapıştır.', 'mid'); },
+        function () { yaz(durum, bekliyor ? 'Panel cevap vermedi. Chrome "yerel ağ" izni soruyorsa İzin ver de: sonuç yine de gider ve burada yazar, o zaman yapıştırmana gerek kalmaz. Gitmezse sonuç kopyalandı, MARS\'a yapıştır.' : 'MARS paneline ulaşılamadı (panel kapalı ya da telefondasın). Sonuç kopyalandı, MARS\'a yapıştır.', 'mid'); },
         function () { yaz(durum, 'MARS paneline ulaşılamadı. Bu metni MARS\'a yapıştır: MARS SONUÇ · ' + metin, 'mid'); });
     }
     try {
       fetch(ADRES, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(veri), targetAddressSpace: 'local' })
         .then(function (r) { return r.json().then(function (j) { return { ok: r.ok && j.ok, j: j }; }); })
         .then(function (s) {
-          if (bitti) return; bitti = true; clearTimeout(zaman);
-          if (s.ok) { yaz(durum, 'MARS\'a gönderildi ve ilerleme tablosuna yazıldı: ' + s.j.ozet, 'ok'); if (tus) tus.textContent = 'Gönderildi'; }
-          else yedek();
+          var gec = bitti; bitti = true; clearTimeout(zaman);
+          if (s.ok) { yaz(durum, 'MARS\'a gönderildi ve ilerleme tablosuna yazıldı: ' + s.j.ozet, 'ok'); if (tus) { tus.textContent = 'Gönderildi'; tus.disabled = true; } }
+          else if (!gec) yedek();
         })
         .catch(function () { if (!bitti) { bitti = true; clearTimeout(zaman); yedek(); } });
     } catch (e) { if (!bitti) { bitti = true; clearTimeout(zaman); yedek(); } }
