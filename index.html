@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,800&display=swap">
+<title>Hazırlık Çalışma Sayfaları</title>
+<style>
+:root { --bg:#7a3214; --sheet:#323232; --line:#262626; --ink:#e3e3e3; --muted:#c9cdd4; --teal:#ffa070; --bad:#ff8a80; color-scheme: dark; }
+* { box-sizing: border-box; }
+body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: var(--bg); color: var(--ink); font: 17px/1.5 "Helvetica Neue", Arial, system-ui, sans-serif; padding: 16px; }
+form { width: min(420px, 100%); display: grid; gap: 12px; background: var(--sheet); border: 1px solid var(--line); border-radius: 16px; padding: 24px; box-shadow: 0 1px 2px rgba(0,0,0,.30), 0 10px 28px rgba(0,0,0,.35); }
+h1 { margin: 0 0 8px; display: flex; align-items: center; justify-content: center; gap: 9px; line-height: 1; }
+/* logo ile yazı tek parça, "B · yan yana, çizgili" (Kerem 2026-10-20 14:39): Mars | iki satır yazı */
+.logo .m { height: 36px; width: auto; flex: none; }
+.logo .a { font: 800 12.5px/1.05 "Bricolage Grotesque", "Avenir Next", system-ui, sans-serif; letter-spacing: .01em; color: var(--ink); text-align: left; border-left: 2px solid #5a5a5a; padding: 2px 0 2px 9px; text-shadow: 0 1px 2px rgba(0,0,0,.45); }
+.gizli { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+p { margin: 0; color: var(--muted); font-size: 15px; }
+input { font: inherit; color: var(--ink); background: #464646; border: 1px solid #575757; border-radius: 10px; padding: 12px; }
+input:focus { outline: 2px solid var(--teal); border-color: transparent; }
+button { font: 700 16px/1 inherit; font-family: inherit; color: var(--sheet); background: var(--teal); border: 0; border-radius: 10px; padding: 14px; cursor: pointer; }
+button:disabled { opacity: .6; cursor: wait; }
+#hata { color: var(--bad); min-height: 1.5em; text-align: center; }
+.satir { display: flex; gap: 8px; }
+.satir input { flex: 1; min-width: 0; }
+.satir button { padding: 0 16px; font-size: 14px; }
+.satir input { font-size: 15px; padding: 8px 11px; border-radius: 9px; }
+.satir button { border-radius: 9px; }
+/* iPhone 16 px'ten küçük kutuya dokununca ekranı yakınlaştırır; telefonda 16 px */
+@media (max-width: 600px) { .satir input { font-size: 16px; } }
+</style>
+</head>
+<body>
+<form id="f" hidden>
+  <h1 class="logo"><img class="m" src="mars-logo.png" alt="Mars"><span class="a">dil geliştirme<br>paneli</span></h1>
+  <div class="satir">
+    <input id="s" type="password" autocomplete="current-password" aria-label="Şifre" placeholder="Şifre" required>
+    <button id="b" type="submit">Gir</button>
+  </div>
+  <p id="hata" role="alert"></p>
+</form>
+<noscript>Bu sayfa için tarayıcıda JavaScript açık olmalı.</noscript>
+<script>
+(function () {
+  var TUZ = 'Jq2PDg2T+nObhrcB090wjg==', IV = '7Jx1+ydF+tRcviVb', VERI = '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', TEKRAR = 250000, ANAHTAR = 'hazirlik-anahtar', CIHAZ = 'hazirlik-cihaz';
+  function bayt(s) { var b = atob(s), a = new Uint8Array(b.length); for (var i = 0; i < b.length; i++) a[i] = b.charCodeAt(i); return a; }
+  function ac(ham) {
+    return crypto.subtle.importKey('raw', ham, 'AES-GCM', false, ['decrypt'])
+      .then(function (k) { return crypto.subtle.decrypt({ name: 'AES-GCM', iv: bayt(IV) }, k, bayt(VERI)); })
+      .then(function (d) { var html = new TextDecoder().decode(d);
+        // sayfa tam yüklenmeden document.open çağrılırsa şifre ekranı silinmez, içerik altına eklenir; yüklenmeyi bekle
+        return new Promise(function (r) { if (document.readyState === 'complete') r(); else addEventListener('load', function () { r(); }, { once: true }); })
+          .then(function () { document.open(); document.write(html); document.close(); }); });
+  }
+  function formuGoster() { var f = document.getElementById('f'); f.hidden = false; document.getElementById('s').focus(); }
+  // Kerem 2026-10-20 14:10: "her girişte şifre istenecek" → anahtar yalnız bu sekmede (sessionStorage), sekme kapanınca silinir; eski kalıcı kaydı da sil
+  try { localStorage.removeItem(ANAHTAR); } catch (e) {}
+  // Kerem'in bilgisayarı: kalıcı cihaz kaydı varsa şifre hiç sorulmaz
+  var hatirla = location.hash === '#bu-cihazi-hatirla';
+  if (location.hash === '#bu-cihazi-unut') { try { localStorage.removeItem(CIHAZ); sessionStorage.removeItem(ANAHTAR); } catch (e) {} }
+  if (hatirla || location.hash === '#bu-cihazi-unut') history.replaceState(null, '', location.pathname + location.search);
+  // Kerem'e özel şifresiz bağlantı (Kerem 2026-10-20 14:46): adres #k=<anahtar> ile gelirse şifre sorulmaz, tarayıcı da kalıcı hatırlanır.
+  // Anahtar yalnız 08-VERI-HAVUZU/sirlar.md içinde ve panelin site tuşunda durur; adres çubuğundan hemen silinir.
+  var ozel = null, m = location.hash.match(/^#k=([A-Za-z0-9_-]{43})$/);
+  if (m) { ozel = m[1].replace(/-/g, '+').replace(/_/g, '/') + '='; hatirla = true; history.replaceState(null, '', location.pathname + location.search); }
+  var kayitli = ozel; try { kayitli = kayitli || localStorage.getItem(CIHAZ) || sessionStorage.getItem(ANAHTAR); } catch (e) {}
+  (kayitli ? ac(bayt(kayitli)).then(function () { try { sessionStorage.setItem(ANAHTAR, kayitli); if (hatirla) localStorage.setItem(CIHAZ, kayitli); } catch (e) {} }) : Promise.reject()).catch(formuGoster);
+  document.getElementById('f').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var b = document.getElementById('b'), h = document.getElementById('hata'); b.disabled = true; h.textContent = '';
+    crypto.subtle.importKey('raw', new TextEncoder().encode(document.getElementById('s').value), 'PBKDF2', false, ['deriveBits'])
+      .then(function (k) { return crypto.subtle.deriveBits({ name: 'PBKDF2', salt: bayt(TUZ), iterations: TEKRAR, hash: 'SHA-256' }, k, 256); })
+      .then(function (ham) { var s = btoa(String.fromCharCode.apply(null, new Uint8Array(ham))); return ac(ham).then(function () { try { sessionStorage.setItem(ANAHTAR, s); if (hatirla) localStorage.setItem(CIHAZ, s); } catch (e) {} }); })
+      .catch(function () { b.disabled = false; h.textContent = 'Şifre yanlış, tekrar dene.'; });
+  });
+})();
+</script>
+</body>
+</html>
