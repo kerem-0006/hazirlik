@@ -48,6 +48,7 @@
     '.al-alt{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px;font-weight:700}',
     '.al-alt sub{font:800 12px var(--body);color:var(--teal);margin-left:1px}',
     '.al-btns{display:flex;flex-wrap:wrap;gap:8px}',
+    '.al-bos{color:var(--ans);font-weight:800;letter-spacing:.05em}',
     '.al-sonuc{background:var(--sheet);border:1px solid var(--line);border-radius:20px;padding:20px;display:grid;gap:12px;box-shadow:0 1px 2px rgba(0,0,0,.30),0 10px 28px rgba(0,0,0,.35)}',
     '.al-sonuc h2{font:800 26px/1.1 var(--display);margin:0}',
     '.al-sonuc ul{list-style:none;margin:0;padding:0;display:grid;gap:4px}',
@@ -96,7 +97,11 @@
   // metindeki ___ ya da [[n]] işaretlerini kutuya çevirir
   function satir(html, kutular) {
     var p = document.createElement('p'); p.className = 'al-st'; p.lang = 'en'; p.innerHTML = html;
-    p.querySelectorAll('i.yer').forEach(function (y, k) { y.replaceWith(kutular[k]); });
+    // kutusu olmayan boşluk (test, doğru/yanlış, hata soruları) çizgi olarak görünür; 2026-11-11'e kadar "undefined" yazıyordu
+    p.querySelectorAll('i.yer').forEach(function (y, k) {
+      if (kutular[k]) { y.replaceWith(kutular[k]); return; }
+      var b = document.createElement('span'); b.className = 'al-bos'; b.textContent = '______'; y.replaceWith(b);
+    });
     return p;
   }
   function geri(li) { var f = li.querySelector('.al-fb'); if (!f) { f = document.createElement('p'); f.className = 'al-fb'; li.appendChild(f); } return f; }
