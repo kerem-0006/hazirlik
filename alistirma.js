@@ -2,6 +2,7 @@
    İçerik bu dosyada DEĞİL, her sayfanın içinde (window.ALISTIRMA) durur: bu dosya şifresiz yayınlanır, sayfalar şifreli.
    Tipler: bosluk (cümlede boşluk) · metin (paragrafta boşluk) · cumle (tam cümle yaz) · secmeli (test) ·
    metinsecmeli (paragraf + test) · dy (doğru/yanlış) · kutu (kutudan harf) · hata (altı çizili yanlış) · eslestir (harf seç).
+   2026-11-26: hata tipinde S.n ile 3-5 seçenek (Akdoğan error correction 5 altı çizili yer).
    Her bölüm ayrı kontrol edilir; sayfa sonunda toplam ve "MARS'a gönder". Yazılan cevaplar o tarayıcıda saklanır. */
 (function () {
   var V = window.ALISTIRMA;
@@ -238,7 +239,7 @@
             var d = uyar(i.value, S.a, S.kati); i.className = 'al-in w ' + (d ? 'ok' : 'no'); fbYaz(li, d, esc(ilk(S.a)), S.ac, false, !i.value.trim()); return d;
           } });
         } else if (B.tip === 'secmeli' || B.tip === 'dy' || B.tip === 'hata' || B.tip === 'eslestir') {
-          var opts = B.tip === 'dy' ? ['True · Doğru', 'False · Yanlış'] : B.tip === 'hata' ? ['a', 'b', 'c', 'd'].slice(0, S.n || 4) : B.tip === 'eslestir' ? B.secenek.map(function (x) { return x[0]; }) : S.o;
+          var opts = B.tip === 'dy' ? ['True · Doğru', 'False · Yanlış'] : B.tip === 'hata' ? ['a', 'b', 'c', 'd', 'e'].slice(0, S.n || 4) : B.tip === 'eslestir' ? B.secenek.map(function (x) { return x[0]; }) : S.o;
           var dogru = B.tip === 'dy' ? (S.a ? 0 : 1) : B.tip === 'hata' || B.tip === 'eslestir' ? 'abcdefgh'.indexOf(S.a) : S.a;
           li.appendChild(satir(noHtml + hazirla(S.q), []));
           var w = secenekler(id, opts, B.tip === 'secmeli' && !S.harfsiz);
